@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Recensions;
-use App\Http\Requests\StoreRecensionsRequest;
-use App\Http\Requests\UpdateRecensionsRequest;
+use App\Models\Recension;
+use App\Http\Requests\StoreRecensionRequest;
+use App\Http\Requests\UpdateRecensionRequest;
 
-class RecensionsController extends Controller
+class RecensionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class RecensionsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRecensionsRequest $request)
+    public function store(StoreRecensionRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class RecensionsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Recensions $recensions)
+    public function show(Recension $recensions)
     {
         //
     }
@@ -43,7 +43,7 @@ class RecensionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Recensions $recensions)
+    public function edit(Recension $recensions)
     {
         //
     }
@@ -51,7 +51,7 @@ class RecensionsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRecensionsRequest $request, Recensions $recensions)
+    public function update(UpdateRecensionRequest $request, Recension $recensions)
     {
         //
     }
@@ -59,7 +59,7 @@ class RecensionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Recensions $recensions)
+    public function destroy(Recension $recensions)
     {
         //
     }

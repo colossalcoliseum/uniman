@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('term_papers', function (Blueprint $table) {
+        Schema::create('consultations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->foreignId('term_paper_id')->constrained('term_papers');
             $table->foreignId('teacher_id')->constrained('users');
             $table->foreignId('student_id')->constrained('users');
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date');
-            $table->string('status')->default('pending');
-            $table->foreignId('score_id')->nullable()->constrained('scores');
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at');
+            $table->enum('type', ['in_person', 'online'])->default('online');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->string('location');
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('term_papers');
+        Schema::dropIfExists('consultations');
     }
 };
