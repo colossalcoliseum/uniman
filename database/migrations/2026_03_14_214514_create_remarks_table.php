@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('remarks', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
+            $table->decimal('ects_score', 3, 1);
+            $table->decimal('gpa_score', 3, 2);
+            $table->integer('bg_score');
+            $table->string('letter_grade');
+            $table->integer('passing_score');
+
             $table->timestamps();
         });
     }

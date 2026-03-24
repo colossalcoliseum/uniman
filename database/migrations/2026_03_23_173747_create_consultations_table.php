@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
             $table->foreignId('term_paper_id')->constrained('term_papers');
             $table->foreignId('teacher_id')->constrained('users');
             $table->foreignId('student_id')->constrained('users');
@@ -22,8 +20,8 @@ return new class extends Migration
             $table->timestamp('ends_at');
             $table->enum('type', ['in_person', 'online'])->default('online');
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
-            $table->string('location');
-            $table->string('notes')->nullable();
+            $table->string('location')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

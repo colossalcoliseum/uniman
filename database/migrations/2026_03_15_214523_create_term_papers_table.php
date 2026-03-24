@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users');
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date');
-            $table->string('status')->default('pending');
-            $table->foreignId('score_id')->nullable()->constrained('scores');
+            $table->enum('status', ['pending', 'accepted', 'rejected', 'revision_required', 'in_review', 'defended', 'failed'])->default('pending');
+            $table->foreignId('remark_id')->nullable()->constrained('remarks');
             $table->timestamps();
         });
     }

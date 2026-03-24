@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('recensions', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->nullable();
+            $table->foreignId('term_paper_id')->constrained('term_papers');
+            $table->foreignId('score_id')->nullable()->constrained('scores');
+            $table->foreignId('reviewer_id')->constrained('users');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->text('final_verdict')->nullable();
             $table->timestamps();
         });
     }
