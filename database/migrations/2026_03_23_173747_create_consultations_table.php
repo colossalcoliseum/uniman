@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
-            $table->enum('type', ['in_person', 'online'])->default('online');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->string('type')->default('online');
+            $table->string('status')->default('pending');
             $table->string('location')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

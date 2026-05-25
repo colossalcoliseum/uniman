@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('term_paper_id')->constrained('term_papers');
             $table->foreignId('remark_id')->nullable()->constrained('remarks');
             $table->foreignId('reviewer_id')->constrained('users');
-            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->string('status')->default('pending');
             $table->text('final_verdict')->nullable();
             $table->timestamps();
         });

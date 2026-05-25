@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->foreignId('term_paper_id')->constrained('term_papers');
             $table->timestamp('end_date');
-            $table->enum('type', ['submission', 'review', 'defense', 'other'])->default('other');
+            $table->string('type')->default('other');
             $table->text('description')->nullable();
             $table->timestamps();
         });

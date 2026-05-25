@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af29b9aabb86deb3628f2d0a5aba43d9",
+    "content-hash": "524ea936fb2c16b3a2c3019bdafc1098",
     "packages": [
         {
             "name": "annexare/countries-list",
