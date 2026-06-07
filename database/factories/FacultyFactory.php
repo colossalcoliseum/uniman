@@ -40,6 +40,6 @@ class FacultyFactory extends Factory
 
     public function getFacultyNameSlug($name): string
     {
-        return strval(strtolower(str_replace(' ', '', $name . "-" . Uuid::uuid4())));
+        return strtolower(str_replace(' ', '', $name . "-" . Uuid::uuid4()));
     }
 }

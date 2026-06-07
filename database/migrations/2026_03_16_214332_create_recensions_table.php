@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('reviewer_id')->constrained('users');
             $table->string('status')->default('pending');
             $table->text('final_verdict')->nullable();
+            $table->boolean('passed')->nullable();
             $table->timestamps();
         });
     }

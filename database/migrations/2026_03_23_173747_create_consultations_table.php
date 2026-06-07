@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->string('location')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('attended')->nullable();
             $table->timestamps();
         });
     }

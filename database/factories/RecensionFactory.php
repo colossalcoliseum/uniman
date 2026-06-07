@@ -17,7 +17,10 @@ class RecensionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence(5),
+            /*TODO: да връща резултат тип 'recension of {име на дипломна работа}' -> без повтарящи се имена на дипломни работи
+            ->кеширане + проверка за дубликати
+            */
         ];
     }
 }

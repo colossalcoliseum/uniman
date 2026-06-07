@@ -21,9 +21,14 @@ class ConsultationFactory extends Factory
             'term_paper_id' => $this->faker->numberBetween(1, 100),
             'teacher_id' => $this->faker->numberBetween(1, 100),
             'student_id' => $this->getUniqueStudentId($this->faker->numberBetween(1, 10000)),
+            'starts_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'ends_at' => $this->faker->dateTimeBetween('now', '+2 months'),
+            'type' => $this->faker->randomElement(['online', 'in_person']),
         ];
     }
+    public function getRandomConsultationType(){
 
+    }
     public function getUniqueStudentId(int $id): int
     {
 

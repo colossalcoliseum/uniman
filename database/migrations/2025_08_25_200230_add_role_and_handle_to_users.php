@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->default('dean')->after('password');
             $table->string('handle')->default('dean')->after('name');
+            $table->string('type')->nullable()->after('handle');
         });
     }
 
