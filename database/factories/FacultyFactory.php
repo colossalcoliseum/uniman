@@ -2,8 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
+use App\Models\Country;
+use App\Models\Faculty;
+use App\Models\Institution;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -21,25 +26,35 @@ class FacultyFactory extends Factory
         return [
             'name' => $name = $this->getFacultyName(),
             'slug' => $this->getFacultyNameSlug($name),
-            'institution_kd' => $this->faker->numberBetween(1, 10000),
-            'country_id' => $this->faker->numberBetween(1, 5),
-            'dean_id' => $this->faker->numberBetween(1, 5),
+            'institution_id' => Institution::inRandomOrder()->value('id'),
+            'country_id' => Country::inRandomOrder()->value('id'),
+            'dean_id' => User::where('role', UserRole::DEAN->value)
+                ->inRandomOrder()
+                ->value('id'),
         ];
     }
 
     public function getFacultyName(): string
     {
-        return strval("Faculty of {$this->faker->name()}");
+        return "Faculty of {$this->faker->randomElement(Faculty::$faculties)}";
     }
 
-    public function getRandomDeanId(): int
+    private array $usedDeanIds = [];
+
+    private function getRandomDeanId(): int
     {
-        $allDeans = User::where('role', 'dean')->get();
-        return $this->faker->numberBetween(1, 5);
+        $deanId = User::where('role', UserRole::DEAN->value)
+            ->whereNotIn('id', $this->usedDeanIds)
+            ->inRandomOrder()
+            ->value('id');
+
+        $this->usedDeanIds[] = $deanId;
+
+        return $deanId;
     }
 
     public function getFacultyNameSlug($name): string
     {
-        return strtolower(str_replace(' ', '', $name . "-" . Uuid::uuid4()));
+        return strtolower(str_replace(' ', '', $name.'-'.Uuid::uuid4()));
     }
 }

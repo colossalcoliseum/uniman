@@ -53,12 +53,12 @@ class User extends Authenticatable
     }
 
     #[Scope]
-    protected function ofRole(Builder $query, string $role): void
+    protected function ofRole(Builder $query, string $role)
     {
         $query->where('role', $role);
     }
-
-    protected function ofType(Builder $query, string $type): void
+    #[Scope]
+    protected function ofType(Builder $query, string $type)
     {
         $query->where('type', $type);
     }

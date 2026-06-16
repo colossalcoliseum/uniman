@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Consultation;
+use App\Models\TermPaper;
 use Illuminate\Database\Seeder;
 
 class ConsultationSeeder extends Seeder
@@ -12,6 +13,7 @@ class ConsultationSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $noOfTermPapers = count(TermPaper::$domains);
+        Consultation::factory()->count($noOfTermPapers * 3)->create();
     }
 }

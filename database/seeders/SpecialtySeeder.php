@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Specialty;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,7 @@ class SpecialtySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $numOfSpecialties = count(Specialty::$specialties);
+        Specialty::factory()->count($numOfSpecialties)->create();
     }
 }

@@ -4,16 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('dean')->after('password');
-            $table->string('handle')->default('dean')->after('name');
+            $table->string('role')->default('student')->after('password');
+            $table->string('handle')->default('user')->after('name');
             $table->string('type')->nullable()->after('handle');
         });
     }
@@ -24,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn(['role', 'handle', 'type']);
         });
     }
 };

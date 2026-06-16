@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\Country;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Ramsey\Uuid\Uuid;
-
-/*използвай array_rand директно от countries.php*/
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Institution>
@@ -23,15 +22,17 @@ class InstitutionFactory extends Factory
     {
         return [
             'name' => $name = $this->generateUniqueUniversityName(),
-            'slug' => $this->getInstitutionNameSlug($name),
+            'slug' => $this->generateSlug($name),
             'type' => 'University',
-            'country_id' => array_rand(Country::$countries),
+            'country_id' => Country::inRandomOrder()->value('id'),
             'description' => $this->faker->realText(),
-            'manager_id' => $this->faker->randomElement($this->getAllTeachers()), // TODO: или по роля т.е. да е проф. или доц чрез randomElement
+            'manager_id' => User::where('role', UserRole::RECTOR->value)
+                ->inRandomOrder()
+                ->value('id'),
         ];
     }
 
-    public function generateUniqueUniversityName(): string
+    private function generateUniqueUniversityName(): string
     {
         $universityTypes = [
             'Technical University',
@@ -43,18 +44,11 @@ class InstitutionFactory extends Factory
             'Public University',
         ];
 
-        return $universityTypes[array_rand($universityTypes)] . ' of ' . $this->faker->country();
+        return $universityTypes[array_rand($universityTypes)].' of '.$this->faker->country();
     }
 
-    public function getAllTeachers(): array
+    private function generateSlug($name): string
     {
-        return once(function () {
-            return User::ofType('teacher')->pluck('id')->toArray();
-        });
-    }
-
-    public function getInstitutionNameSlug($name): string
-    {
-        return strtolower(str_replace(' ', '', $name . "-" . Uuid::uuid4()));
+        return Str::slug($name.'-'.$this->faker->uuid());
     }
 }

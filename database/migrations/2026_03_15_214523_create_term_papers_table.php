@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('teacher_id')->constrained('users');
             $table->foreignId('student_id')->constrained('users');
             $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date');
+            $table->timestamp('end_date')->nullable();
             $table->string('status')->default('pending');
             $table->foreignId('remark_id')->nullable()->constrained('remarks');
             $table->timestamps();

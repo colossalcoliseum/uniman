@@ -2,6 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\TermPaperStatus;
+use App\Enums\UserRole;
+use App\Models\Remark;
+use App\Models\TermPaper;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +21,25 @@ class RecensionFactory extends Factory
      */
     public function definition(): array
     {
+        $termPaper = TermPaper::inRandomOrder()->first();
+
         return [
-            'title' => $this->faker->sentence(5),
-            /*TODO: да връща резултат тип 'recension of {име на дипломна работа}' -> без повтарящи се имена на дипломни работи
-            ->кеширане + проверка за дубликати
-            */
+            'term_paper_id' => $termPaper->id,
+            'title' => $termPaper->title,
+            'remark_id' => Remark::inRandomOrder()->value('id'),
+            'reviewer_id' => $this->getReviewerId(),
+            'status' => $this->faker->randomElement(TermPaperStatus::cases()),
+            'final_verdict' => $this->faker->sentence(20),
+            'passed' => $this->faker->boolean(),
+
         ];
+
+    }
+    private function getReviewerId(): ?int
+    {
+        return User::whereIn('role', [
+            UserRole::PROFESSOR->value,
+            UserRole::ASSOCIATE_PROFESSOR->value,
+        ])->inRandomOrder()->value('id');
     }
 }
