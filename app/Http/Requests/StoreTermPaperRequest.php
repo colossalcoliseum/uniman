@@ -2,7 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TermPaperStatus;
+use App\Enums\UserType;
+use App\Models\Remark;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTermPaperRequest extends FormRequest
 {
@@ -22,7 +27,15 @@ class StoreTermPaperRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'alpha_dash', 'max:255'],
+            'teacher_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::TEACHER->value)],
+            'student_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::STUDENT->value)],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
+            'status' => ['required', Rule::enum(TermPaperStatus::class)],
+            'remark_id' => ['required', 'integer', Rule::exists(Remark::class, 'id')],
+
         ];
     }
 }
