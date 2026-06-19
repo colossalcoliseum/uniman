@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +26,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'type',
+        'is_active',
     ];
 
     /**
@@ -49,17 +54,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'role'=>UserRole::class,
+            'type'=>UserType::class,
+            'is_active' =>'boolean'
         ];
     }
 
     #[Scope]
-    protected function ofRole(Builder $query, string $role)
+    protected function ofRole(Builder $query, string $role): void
     {
         $query->where('role', $role);
     }
     #[Scope]
-    protected function ofType(Builder $query, string $type)
+    protected function ofType(Builder $query, string $type):void
     {
         $query->where('type', $type);
+    }
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 }

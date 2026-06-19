@@ -2,18 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faculty;
 use App\Http\Requests\StoreFacultyRequest;
 use App\Http\Requests\UpdateFacultyRequest;
+use App\Models\Faculty;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+use Inertia\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class FacultyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        Gate::authorize('view-any', Faculty::class);
+        $query = Faculty::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('slug', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('institution_id')) {
+            $query->where('institution_id', $request->input('institution_id'));
+        }
+
+        $institutions = $query->orderBy('name')->paginate(10);
+
+        return Inertia::render('institutions/index', ['institutions' => $institutions]);
+
     }
 
     /**
@@ -21,15 +42,21 @@ class FacultyController extends Controller
      */
     public function create()
     {
-        //
+        Gate::authorize('create', Faculty::class);
+
+        return Inertia::render('faculties/create');
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFacultyRequest $request)
+    public function store(StoreFacultyRequest $request): RedirectResponse
     {
-        //
+        Faculty::create($request->validated());
+
+        return redirect()->route('faculties.index')
+            ->with('success', 'Faculty Registered Successful');
     }
 
     /**
@@ -37,7 +64,11 @@ class FacultyController extends Controller
      */
     public function show(Faculty $faculty)
     {
-        //
+        Gate::authorize('view', $faculty);
+
+        return Inertia::render('faculties/show', [
+            'faculty' => $faculty,
+        ]);
     }
 
     /**
@@ -45,7 +76,13 @@ class FacultyController extends Controller
      */
     public function edit(Faculty $faculty)
     {
-        //
+        Gate::authorize('update', $faculty);
+
+
+
+        return Inertia::render('faculties/edit', [
+            'faculty' => $faculty,
+        ]);
     }
 
     /**
@@ -53,7 +90,12 @@ class FacultyController extends Controller
      */
     public function update(UpdateFacultyRequest $request, Faculty $faculty)
     {
-        //
+        $data = $request->validated();
+        $faculty->update($data);
+
+        return redirect()->route('faculties.index')
+            ->with('success', 'Faculty Registered Successful');
+
     }
 
     /**
@@ -61,6 +103,11 @@ class FacultyController extends Controller
      */
     public function destroy(Faculty $faculty)
     {
-        //
+        Gate::authorize('delete', $faculty);
+        $faculty->delete();
+
+        return redirect()->route('faculties.index')
+            ->with('success', 'Faculty Removed  Successful');
+
     }
 }

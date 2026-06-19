@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('institution_id')->constrained('institutions');
             $table->foreignId('country_id')->constrained('countries');
             $table->foreignId('dean_id')->constrained('users');
-
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

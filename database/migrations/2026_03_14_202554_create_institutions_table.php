@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('manager_id')->constrained('users');
             $table->string('logo')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

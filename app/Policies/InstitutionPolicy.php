@@ -2,18 +2,23 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Institution;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class InstitutionPolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->role === UserRole::ADMIN ? true : null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +26,7 @@ class InstitutionPolicy
      */
     public function view(User $user, Institution $institution): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +42,7 @@ class InstitutionPolicy
      */
     public function update(User $user, Institution $institution): bool
     {
-        return false;
+        return $institution->manager_id === $user->id;
     }
 
     /**
@@ -45,7 +50,7 @@ class InstitutionPolicy
      */
     public function delete(User $user, Institution $institution): bool
     {
-        return false;
+        return false; /* запазена функционалност само за администратор: триене, възстановяване и перманентно триенеи */
     }
 
     /**

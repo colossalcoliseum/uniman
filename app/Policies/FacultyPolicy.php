@@ -2,18 +2,23 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Faculty;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class FacultyPolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->role === UserRole::ADMIN ? true : null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +26,7 @@ class FacultyPolicy
      */
     public function view(User $user, Faculty $faculty): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +42,7 @@ class FacultyPolicy
      */
     public function update(User $user, Faculty $faculty): bool
     {
-        return false;
+        return $this->$faculty->dean_id === $this->$user->id;
     }
 
     /**
@@ -45,7 +50,7 @@ class FacultyPolicy
      */
     public function delete(User $user, Faculty $faculty): bool
     {
-        return false;
+        return false; /* запазена функционалност само за администратор: триене, възстановяване и перманентно триенеи */
     }
 
     /**
