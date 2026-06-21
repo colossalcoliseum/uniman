@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index(Request $request): Response
     {
-        Gate::authorize('view-any', User::class);
+        Gate::authorize('viewAny', User::class);
         $query = User::query();
 
         if ($request->filled('search')) {
@@ -45,7 +45,8 @@ class UserController extends Controller
     public function create()
     {
         Gate::authorize('create', User::class);
-        Inertia::render('users/create');
+
+        return Inertia::render('users/create');
     }
 
     /**
@@ -53,10 +54,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        User::create([
-            $request->validated(),
-            'password' => Hash::make($request->validated('password')),
-        ]);
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+        User::create($data);
 
         return redirect()->route('users.index')
             ->with('success', 'User Created Successfull');
@@ -91,6 +91,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
+        Gate::authorize('update', $user);
+
         $data = $request->validated();
         if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
@@ -131,8 +133,21 @@ class UserController extends Controller
 
     public function changeRole(ChangeUserRoleRequest $request, User $user): RedirectResponse
     {
+        Gate::authorize('changeRole', $user);
         $user->update($request->validated());
 
         return redirect()->back()->with('success', 'Role was updated.');
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+
+        Gate::authorize('restore', $user);
+
+        $user->restore();
+
+        return redirect()->route('users.index')
+            ->with('success', 'User Restored');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Http\Requests\StoreInstitutionRequest;
 use App\Http\Requests\UpdateInstitutionRequest;
+use App\Models\Country;
 use App\Models\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -18,7 +20,7 @@ class InstitutionController extends Controller
      */
     public function index(Request $request): Response
     {
-        Gate::authorize('view-any', Institution::class);
+        Gate::authorize('viewAny', Institution::class);
         $query = Institution::query();
 
         if ($request->filled('search')) {
@@ -44,7 +46,10 @@ class InstitutionController extends Controller
     {
         Gate::authorize('create', Institution::class);
 
-        return Inertia::render('institutions/create');
+        return Inertia::render('institutions/create', [
+            'countries' => Country::select('id', 'name')->orderBy('name')->get(),
+            'users' => Country::select('id', 'name')->where('role', UserType::TEACHER)->orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -85,6 +90,9 @@ class InstitutionController extends Controller
 
         return Inertia::render('institutions/edit', [
             'institution' => $institution,
+            'countries' => Country::select('id', 'name')->orderBy('name')->get(),
+            'users' => Country::select('id', 'name')->where('role', UserType::TEACHER)->orderBy('name')->get(),
+
         ]);
     }
 
@@ -102,7 +110,7 @@ class InstitutionController extends Controller
         $institution->update($data);
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institutions Registered Successful');
+            ->with('success', 'Institutions Updated Successful');
     }
 
     /**
@@ -115,6 +123,19 @@ class InstitutionController extends Controller
         $institution->delete();
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institutions Removed from Regitry Successful');
+            ->with('success', 'Institutions Removed from Registry Successful');
     }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $termPaper = Institution::onlyTrashed()->findOrFail($id);
+
+        Gate::authorize('restore', $termPaper);
+
+        $termPaper->restore();
+
+        return redirect()->route('institutions.index')
+            ->with('success', 'Institution Restored');
+    }
+
 }

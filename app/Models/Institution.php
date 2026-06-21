@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Institution extends Model
 {
     /** @use HasFactory<\Database\Factories\InstitutionFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     public function country(): BelongsTo
     {
@@ -20,7 +22,7 @@ class Institution extends Model
 
     public function manager(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'manager_id');
     }
     #[Scope]
     protected function ofType(Builder $query, string $type): void

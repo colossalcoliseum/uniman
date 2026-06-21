@@ -7,8 +7,8 @@ enum TermPaperStatus: string
     case PENDING = 'pending';
     case ACCEPTED = 'accepted';
     case REJECTED = 'rejected';
-    case REVISION_REQUIRED = 'revision required';
-    case IN_REVIEW = 'in Review';
+    case REVISION_REQUIRED = 'revision_required';
+    case IN_REVIEW = 'in_review';
     case DEFENDED = 'defended';
     case FAILED = 'failed';
 

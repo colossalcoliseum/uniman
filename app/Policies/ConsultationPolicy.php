@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
+use App\Enums\UserType;
 use App\Models\Consultation;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -11,9 +13,15 @@ class ConsultationPolicy
     /**
      * Determine whether the user can view any models.
      */
+
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->role === UserRole::ADMIN ? true : null;
+    }
+
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +29,7 @@ class ConsultationPolicy
      */
     public function view(User $user, Consultation $consultation): bool
     {
-        return false;
+        return $consultation->teacher_id === $user->id || $consultation->student_id === $user->id;
     }
 
     /**
@@ -29,7 +37,7 @@ class ConsultationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->type === UserType::TEACHER->value;
     }
 
     /**
@@ -37,7 +45,7 @@ class ConsultationPolicy
      */
     public function update(User $user, Consultation $consultation): bool
     {
-        return false;
+        return $consultation->teacher_id === $user->id;
     }
 
     /**
@@ -45,7 +53,7 @@ class ConsultationPolicy
      */
     public function delete(User $user, Consultation $consultation): bool
     {
-        return false;
+        return $consultation->teacher_id === $user->id;
     }
 
     /**
@@ -53,7 +61,7 @@ class ConsultationPolicy
      */
     public function restore(User $user, Consultation $consultation): bool
     {
-        return false;
+        return $consultation->teacher_id === $user->id;
     }
 
     /**

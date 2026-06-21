@@ -17,7 +17,7 @@ class UpdateInstitutionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('institution'));
+        return true;
     }
 
     /**
@@ -28,10 +28,11 @@ class UpdateInstitutionRequest extends FormRequest
     public function rules(): array
     {
         $institution = $this->route('institution');
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'alpha_dash',
-                Rule::unique('institutions', 'slug')->ignore($this->$institution->id),
+                Rule::unique('institutions', 'slug')->ignore($institution->id),
                 'max:255'],
             'type' => ['required', Rule::enum(InstitutionType::class)],
             'country_id' => ['required', 'integer', Rule::exists(Country::class, 'id')],

@@ -7,7 +7,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('institutions', InstitutionController::class);
 
     Route::post('institutions/{id}/restore', [InstitutionController::class, 'restore'])
-        ->name('institutions.restore');/*TODO: стздай метод restore*/
+        ->name('institutions.restore')
+        ->withTrashed();
+
 
 });
 

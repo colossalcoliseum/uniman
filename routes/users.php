@@ -7,7 +7,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
 
     Route::post('users/{id}/restore', [UserController::class, 'restore'])
-        ->name('users.restore');
+        ->name('users.restore')
+        ->withTrashed();
 
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])
         ->name('users.toggle-active');

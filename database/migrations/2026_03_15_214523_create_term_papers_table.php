@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('term_papers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->foreignId('teacher_id')->constrained('users');
             $table->foreignId('student_id')->constrained('users');
             $table->timestamp('start_date')->nullable();
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->foreignId('remark_id')->nullable()->constrained('remarks');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

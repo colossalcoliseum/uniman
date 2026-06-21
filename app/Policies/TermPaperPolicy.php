@@ -2,18 +2,24 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
+use App\Enums\UserType;
 use App\Models\TermPaper;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TermPaperPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->role === UserRole::ADMIN ? true : null;
+    }
+
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->type, [UserType::TEACHER], true);
     }
 
     /**
@@ -21,7 +27,7 @@ class TermPaperPolicy
      */
     public function view(User $user, TermPaper $termPaper): bool
     {
-        return false;
+        return $termPaper->teacher_id === $user->id || $termPaper->student_id === $user->id;
     }
 
     /**
@@ -29,7 +35,7 @@ class TermPaperPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::ASSOCIATE_PROFESSOR, UserRole::PROFESSOR], true);
     }
 
     /**
@@ -37,7 +43,7 @@ class TermPaperPolicy
      */
     public function update(User $user, TermPaper $termPaper): bool
     {
-        return false;
+        return $termPaper->teacher_id === $user->id;
     }
 
     /**
@@ -45,7 +51,9 @@ class TermPaperPolicy
      */
     public function delete(User $user, TermPaper $termPaper): bool
     {
-        return false;
+        return $termPaper->teacher_id === $user->id ||
+                in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
+
     }
 
     /**
@@ -53,7 +61,8 @@ class TermPaperPolicy
      */
     public function restore(User $user, TermPaper $termPaper): bool
     {
-        return false;
+        return $termPaper->teacher_id === $user->id ||
+            in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**

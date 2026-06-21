@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\UserRole;
 use App\Enums\UserType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ChangeUserRoleRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class ChangeUserRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->cam('changeRole', $this->route('user'));
+        return $this->user()->can('changeRole', $this->route('user'));
     }
 
     /**
@@ -25,7 +26,7 @@ class ChangeUserRoleRequest extends FormRequest
     {
         return [
             'role' => ['required', Rule::enum(UserRole::class)],
-            'type' => ['nullable', Rule::enum(UserType::class)]
+            'type' => ['nullable', Rule::enum(UserType::class)],
         ];
     }
 }

@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         /* Единични записи */
-        User::factory()->admin()->create(['email' => 'admin@admin.com']);
+        User::factory()->admin()->create(['email' => 'admin@admin.com', 'password'=>'123123123']);
         User::factory()->rector()->count(5)->create();
         User::factory()->dean()->create(['email' => 'dean@uni.com']);
 

@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recension extends Model
 {
     /** @use HasFactory<\Database\Factories\RecensionFactory> */
     use HasFactory;
+    use SoftDeletes;
+
 
     public function termPaper(): BelongsTo
     {
@@ -21,7 +24,7 @@ class Recension extends Model
     }
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'reviewer_id');
     }
 
 }

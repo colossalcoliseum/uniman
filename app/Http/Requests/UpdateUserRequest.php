@@ -13,7 +13,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('user'));
+        return true;
     }
 
     /**
@@ -23,7 +23,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = route('user');
+        $user = $this->route('user');
         return [
             'name' => ['required', 'string', 'max:255'],
             'handle' => ['required', 'alpha_dash', 'max:255', Rule::unique(User::class, 'handle')->ignore($user->id)],

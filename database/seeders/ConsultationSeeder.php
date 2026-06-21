@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Consultation;
 use App\Models\TermPaper;
+use Database\Factories\TermPaperFactory;
 use Illuminate\Database\Seeder;
 
 class ConsultationSeeder extends Seeder
@@ -13,7 +14,7 @@ class ConsultationSeeder extends Seeder
      */
     public function run(): void
     {
-        $noOfTermPapers = count(TermPaper::$domains);
+        $noOfTermPapers = count(TermPaperFactory::$domains);
         Consultation::factory()->count($noOfTermPapers * 3)->create();
     }
 }

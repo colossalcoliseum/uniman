@@ -71,7 +71,10 @@ class UserPolicy
     {
         return false;
     }
-
+    public function changeRole(User $user, User $model): bool
+    {
+        return false;
+    }
     public function hasViewPrivileges(User $user, User $model): bool
     {
         if ($user->role !== UserRole::RECTOR) {

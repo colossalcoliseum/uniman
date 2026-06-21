@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('final_verdict')->nullable();
             $table->boolean('passed')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

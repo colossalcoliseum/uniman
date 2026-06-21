@@ -8,6 +8,7 @@ use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -16,6 +17,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -61,7 +63,7 @@ class User extends Authenticatable
     }
 
     #[Scope]
-    protected function ofRole(Builder $query, string $role): void
+    protected function ofRole(Builder $query, string $role):void
     {
         $query->where('role', $role);
     }
@@ -71,7 +73,7 @@ class User extends Authenticatable
         $query->where('type', $type);
     }
     #[Scope]
-    protected function active(Builder $query): void
+    protected function active(Builder $query):void
     {
         $query->where('is_active', true);
     }
