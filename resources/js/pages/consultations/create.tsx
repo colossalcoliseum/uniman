@@ -1,4 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,79 +11,76 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 
-import termPaperRoutes from '@/routes/term-papers';
-import type { TermPaper, UserOption, Remark } from '@/types/models';
-import { TERM_PAPER_STATUS_LABELS } from '@/types/models';
+import consultationRoutes from '@/routes/consultations';
+import {
+    CONSULTATION_STATUS_LABELS,
+    CONSULTATION_TYPE_LABELS
 
-const { index, update } = termPaperRoutes;
+} from '@/types/models';
+import type {UserOption} from '@/types/models';
+
+const { index, store } = consultationRoutes;
 
 interface Props {
-    termPaper: TermPaper;
     teachers: UserOption[];
     students: UserOption[];
-    remarks: Remark[];
+    termPapers: UserOption[];
 }
 
-export default function Edit({
-    termPaper,
-    teachers,
-    students,
-    remarks,
-}: Props) {
-    const { data, setData, put, processing, errors } = useForm({
-        name: termPaper.name,
-        slug: termPaper.slug,
-        teacher_id: String(termPaper.teacher_id),
-        student_id: String(termPaper.student_id),
-        start_date: termPaper.start_date,
-        end_date: termPaper.end_date,
-        status: termPaper.status as string,
-        remark_id: termPaper.remark ? String(termPaper.remark) : '',
+export default function Create({ teachers, students, termPapers }: Props) {
+    const { data, setData, post, processing, errors } = useForm({
+        term_paper_id: '',
+        teacher_id: '',
+        student_id: '',
+        starts_at: '',
+        ends_at: '',
+        type: '',
+        status: '',
+        location: '',
+        notes: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        put(update(termPaper.id).url);
+        post(store().url);
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[{ title: 'Term Papers', href: index().url }]}
-        >
-            <Head title={`Редакция: ${termPaper.name}`} />
+        <AppLayout breadcrumbs={[{ title: 'Консултации', href: index().url }]}>
+            <Head title="Нова консултация" />
 
             <div className="p-6">
                 <form
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                     <div className="col-span-2">
-                        <Label htmlFor="name">Заглавие</Label>
-                        <Input
-                            id="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                        />
-                        {errors.name && (
-                            <p className="text-sm text-destructive">
-                                {errors.name}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* slug */}
+                    {/* term_paper_id */}
                     <div className="col-span-2">
-                        <Label htmlFor="slug">Slug</Label>
-                        <Input
-                            id="slug"
-                            value={data.slug}
-                            onChange={(e) => setData('slug', e.target.value)}
-                        />
-                        {errors.slug && (
+                        <Label htmlFor="term_paper_id">Курсова работа</Label>
+                        <Select
+                            value={data.term_paper_id}
+                            onValueChange={(v) => setData('term_paper_id', v)}
+                        >
+                            <SelectTrigger id="term_paper_id">
+                                <SelectValue placeholder="Избери курсова работа" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {termPapers.map((termPaper) => (
+                                    <SelectItem
+                                        key={termPaper.id}
+                                        value={String(termPaper.id)}
+                                    >
+                                        {termPaper.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.term_paper_id && (
                             <p className="text-sm text-destructive">
-                                {errors.slug}
+                                {errors.term_paper_id}
                             </p>
                         )}
                     </div>
@@ -143,38 +141,63 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* start_date */}
+                    {/* starts_at */}
                     <div>
-                        <Label htmlFor="start_date">Начална дата</Label>
+                        <Label htmlFor="starts_at">Начало</Label>
                         <Input
-                            id="start_date"
-                            type="date"
-                            value={data.start_date}
+                            id="starts_at"
+                            type="datetime-local"
+                            value={data.starts_at}
                             onChange={(e) =>
-                                setData('start_date', e.target.value)
+                                setData('starts_at', e.target.value)
                             }
                         />
-                        {errors.start_date && (
+                        {errors.starts_at && (
                             <p className="text-sm text-destructive">
-                                {errors.start_date}
+                                {errors.starts_at}
                             </p>
                         )}
                     </div>
 
-                    {/* end_date */}
+                    {/* ends_at */}
                     <div>
-                        <Label htmlFor="end_date">Крайна дата</Label>
+                        <Label htmlFor="ends_at">Край</Label>
                         <Input
-                            id="end_date"
-                            type="date"
-                            value={data.end_date}
-                            onChange={(e) =>
-                                setData('end_date', e.target.value)
-                            }
+                            id="ends_at"
+                            type="datetime-local"
+                            value={data.ends_at}
+                            onChange={(e) => setData('ends_at', e.target.value)}
                         />
-                        {errors.end_date && (
+                        {errors.ends_at && (
                             <p className="text-sm text-destructive">
-                                {errors.end_date}
+                                {errors.ends_at}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* type */}
+                    <div>
+                        <Label htmlFor="type">Тип</Label>
+                        <Select
+                            value={data.type}
+                            onValueChange={(v) => setData('type', v)}
+                        >
+                            <SelectTrigger id="type">
+                                <SelectValue placeholder="Избери тип" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Object.entries(CONSULTATION_TYPE_LABELS).map(
+                                    ([value, label]) => (
+                                        <SelectItem key={value} value={value}>
+                                            {label}
+                                        </SelectItem>
+                                    ),
+                                )}
+                            </SelectContent>
+                        </Select>
+                        {errors.type && (
+                            <p className="text-sm text-destructive">
+                                {errors.type}
                             </p>
                         )}
                     </div>
@@ -190,7 +213,7 @@ export default function Edit({
                                 <SelectValue placeholder="Избери статус" />
                             </SelectTrigger>
                             <SelectContent>
-                                {Object.entries(TERM_PAPER_STATUS_LABELS).map(
+                                {Object.entries(CONSULTATION_STATUS_LABELS).map(
                                     ([value, label]) => (
                                         <SelectItem key={value} value={value}>
                                             {label}
@@ -206,30 +229,35 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* remark_id */}
-                    <div>
-                        <Label htmlFor="remark_id">Оценка</Label>
-                        <Select
-                            value={data.remark_id}
-                            onValueChange={(v) => setData('remark_id', v)}
-                        >
-                            <SelectTrigger id="remark_id">
-                                <SelectValue placeholder="Избери оценка" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {remarks.map((remark) => (
-                                    <SelectItem
-                                        key={remark.id}
-                                        value={String(remark.id)}
-                                    >
-                                        {remark.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.remark_id && (
+                    {/* location */}
+                    <div className="col-span-2">
+                        <Label htmlFor="location">Локация</Label>
+                        <Input
+                            id="location"
+                            value={data.location}
+                            onChange={(e) =>
+                                setData('location', e.target.value)
+                            }
+                        />
+                        {errors.location && (
                             <p className="text-sm text-destructive">
-                                {errors.remark_id}
+                                {errors.location}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* notes */}
+                    <div className="col-span-2">
+                        <Label htmlFor="notes">Бележки</Label>
+                        <Textarea
+                            id="notes"
+                            value={data.notes}
+                            onChange={(e) => setData('notes', e.target.value)}
+                            rows={4}
+                        />
+                        {errors.notes && (
+                            <p className="text-sm text-destructive">
+                                {errors.notes}
                             </p>
                         )}
                     </div>
@@ -239,7 +267,7 @@ export default function Edit({
                             <Link href={index().url}>Отказ</Link>
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            Запази промените
+                            Запази
                         </Button>
                     </div>
                 </form>

@@ -26,7 +26,7 @@ class UpdateTermPaperRequest extends FormRequest
      */
     public function rules(): array
     {
-        $termPaper = $this->route('termPaper');
+        $termPaper = $this->route('term_paper');
 
         return [
             'name' => ['required', 'string', 'max:255'],

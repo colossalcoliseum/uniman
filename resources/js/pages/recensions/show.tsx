@@ -5,77 +5,58 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 
-import termPaperRoutes from '@/routes/term-papers';
-import { TERM_PAPER_STATUS_LABELS  } from '@/types/models';
-import type {TermPaper} from '@/types/models';
+import recensionRoutes from '@/routes/recensions';
+import { RECENSION_STATUS_LABELS, type Recension } from '@/types/models';
 
-const { index, edit } = termPaperRoutes;
+const { index, edit } = recensionRoutes;
 
 interface Props {
-    termPaper: TermPaper;
+    recension: Recension;
 }
 
-export default function Show({ termPaper }: Props) {
+export default function Show({ recension }: Props) {
     return (
-        <AppLayout
-            breadcrumbs={[{ title: 'Курсови работи', href: index().url }]}
-        >
-            <Head title={termPaper.name} />
+        <AppLayout breadcrumbs={[{ title: 'Рецензии', href: index().url }]}>
+            <Head title={recension.title} />
 
             <div className="p-6">
                 <Card className="max-w-2xl">
                     <CardHeader>
-                        <CardTitle>{termPaper.name}</CardTitle>
+                        <CardTitle>{recension.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
-                        {/* slug */}
-                        <div>
-                            <p className="text-sm text-muted-foreground">
-                                Slug
-                            </p>
-                            <p>{termPaper.slug}</p>
-                        </div>
-
                         {/* status */}
                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Статус
                             </p>
                             <Badge variant="secondary">
-                                {TERM_PAPER_STATUS_LABELS[termPaper.status]}
+                                {RECENSION_STATUS_LABELS[recension.status]}
                             </Badge>
                         </div>
 
-                        {/* teacher */}
+                        {/* passed */}
                         <div>
                             <p className="text-sm text-muted-foreground">
-                                Учител
+                                Издържана
                             </p>
-                            <p>{termPaper.teacher?.name ?? '—'}</p>
+                            <p>{recension.passed ? 'Да' : 'Не'}</p>
                         </div>
 
-                        {/* student */}
+                        {/* term_paper */}
                         <div>
                             <p className="text-sm text-muted-foreground">
-                                Студент
+                                Курсова работа
                             </p>
-                            <p>{termPaper.student?.name ?? '—'}</p>
+                            <p>{recension.term_paper?.name ?? '—'}</p>
                         </div>
 
-                        {/* start_date */}
+                        {/* reviewer */}
                         <div>
                             <p className="text-sm text-muted-foreground">
-                                Начална дата
+                                Рецензент
                             </p>
-                            <p>{termPaper.start_date}</p>
-                        </div>
-
-                        {/* end_date */}
-                        <div>
-                            <p className="text-sm text-muted-foreground">
-                                Крайна дата
-                            </p>
-                            <p>{termPaper.end_date}</p>
+                            <p>{recension.reviewer?.name ?? '—'}</p>
                         </div>
 
                         {/* remark */}
@@ -83,7 +64,17 @@ export default function Show({ termPaper }: Props) {
                             <p className="text-sm text-muted-foreground">
                                 Оценка
                             </p>
-                            <p>{termPaper.remark?.name ?? '—'}</p>
+                            <p>{recension.remark?.name ?? '—'}</p>
+                        </div>
+
+                        {/* final_verdict */}
+                        <div className="col-span-2">
+                            <p className="text-sm text-muted-foreground">
+                                Заключение
+                            </p>
+                            <p className="whitespace-pre-wrap">
+                                {recension.final_verdict}
+                            </p>
                         </div>
                     </CardContent>
                 </Card>
@@ -93,7 +84,7 @@ export default function Show({ termPaper }: Props) {
                         <Link href={index().url}>Назад към списъка</Link>
                     </Button>
                     <Button asChild>
-                        <Link href={edit(termPaper.id).url}>Редакция</Link>
+                        <Link href={edit(recension.id).url}>Редакция</Link>
                     </Button>
                 </div>
             </div>

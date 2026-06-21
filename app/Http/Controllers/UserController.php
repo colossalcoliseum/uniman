@@ -32,10 +32,13 @@ class UserController extends Controller
         if ($request->filled('role')) {
             $query->where('role', $request->input('role'));
         }
+        if ($request->boolean('trashed')) {
+            $query->onlyTrashed();
+        }
 
         $users = $query->orderBy('name')->paginate(20);
 
-        return Inertia::render('users/index', ['users' => $users]);
+        return Inertia::render('users/index', ['users' => $users,    'filters' => ['trashed' => $request->boolean('trashed')]]);
 
     }
 

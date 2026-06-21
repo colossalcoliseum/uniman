@@ -12,6 +12,15 @@ class Faculty extends Model
     /** @use HasFactory<\Database\Factories\FacultyFactory> */
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'institution_id',
+        'country_id',
+        'dean_id',
+    ];
+
     public static array $faculties = [
         'Biological Engineering',
         'Human Resources Management',
@@ -114,6 +123,6 @@ class Faculty extends Model
 
     public function dean(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'dean_id');
     }
 }

@@ -13,7 +13,15 @@ class Recension extends Model
     use HasFactory;
     use SoftDeletes;
 
-
+    protected $fillable = [
+        'title',
+        'term_paper_id',
+        'remark_id',
+        'reviewer_id',
+        'status',
+        'final_verdict',
+        'passed',
+    ];
     public function termPaper(): BelongsTo
     {
         return $this->belongsTo(TermPaper::class);

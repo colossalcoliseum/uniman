@@ -1,24 +1,13 @@
-import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import {
-    type ColumnDef,
+
     flexRender,
     getCoreRowModel,
-    useReactTable,
+    useReactTable
 } from '@tanstack/react-table';
+import type {ColumnDef} from '@tanstack/react-table';
+import { useState } from 'react';
 
-import AppLayout from '@/layouts/app-layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,22 +19,29 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-    TERM_PAPER_STATUS_LABELS,
-    type TermPaper,
-    type Paginated,
-} from '@/types/models';
-import termPaperRoutes from '@/routes/term-papers';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
 
-const { index, create, edit, show, destroy, restore } = termPaperRoutes;
+import specialtyRoutes from '@/routes/specialties';
+import type {Specialty, Paginated} from '@/types/models';
+
+const { index, create, edit, show, destroy, restore } = specialtyRoutes;
 
 interface Props {
-    termPapers: Paginated<TermPaper>;
+    specialties: Paginated<Specialty>;
     filters?: { trashed?: boolean };
 }
 
-export default function Index({ termPapers, filters }: Props) {
+export default function Index({ specialties, filters }: Props) {
     const [search, setSearch] = useState('');
     const showTrashed = filters?.trashed ?? false;
 
@@ -82,31 +78,12 @@ export default function Index({ termPapers, filters }: Props) {
         router.post(restore(id).url);
     };
 
-    const columns: ColumnDef<TermPaper>[] = [
-        { accessorKey: 'name', header: 'Заглавие' },
+    const columns: ColumnDef<Specialty>[] = [
+        { accessorKey: 'name', header: 'Име' },
         {
-            id: 'teacher',
-            header: 'Учител',
-            cell: ({ row }) => row.original.teacher?.name ?? '—',
-        },
-        {
-            id: 'student',
-            header: 'Студент',
-            cell: ({ row }) => row.original.student?.name ?? '—',
-        },
-        {
-            id: 'remark',
-            header: 'Оценка',
-            cell: ({ row }) => row.original.remark?.name ?? '—',
-        },
-        {
-            accessorKey: 'status',
-            header: 'Статус',
-            cell: ({ row }) => (
-                <Badge variant="secondary">
-                    {TERM_PAPER_STATUS_LABELS[row.original.status]}
-                </Badge>
-            ),
+            id: 'institution',
+            header: 'Институция',
+            cell: ({ row }) => row.original.institution?.name ?? '—',
         },
         {
             id: 'actions',
@@ -147,10 +124,9 @@ export default function Index({ termPapers, filters }: Props) {
                                             Сигурен ли си?
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Курсовата работа "
-                                            {row.original.name}" ще бъде
-                                            преместена в кошчето. Може да я
-                                            възстановиш по-късно.
+                                            Специалността "{row.original.name}"
+                                            ще бъде преместена в кошчето. Може
+                                            да я възстановиш по-късно.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
@@ -175,16 +151,14 @@ export default function Index({ termPapers, filters }: Props) {
     ];
 
     const table = useReactTable({
-        data: termPapers.data,
+        data: specialties.data,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
 
     return (
-        <AppLayout
-            breadcrumbs={[{ title: 'Курсови работи', href: index().url }]}
-        >
-            <Head title="Курсови работи" />
+        <AppLayout breadcrumbs={[{ title: 'Специалности', href: index().url }]}>
+            <Head title="Специалности" />
 
             <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
@@ -203,7 +177,7 @@ export default function Index({ termPapers, filters }: Props) {
                     </div>
                     {!showTrashed && (
                         <Button asChild>
-                            <Link href={create().url}>Нова курсова работа</Link>
+                            <Link href={create().url}>Нова специалност</Link>
                         </Button>
                     )}
                 </div>
@@ -257,16 +231,16 @@ export default function Index({ termPapers, filters }: Props) {
 
                 <div className="mt-4 flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">
-                        Страница {termPapers.current_page} от{' '}
-                        {termPapers.last_page} ({termPapers.total} общо)
+                        Страница {specialties.current_page} от{' '}
+                        {specialties.last_page} ({specialties.total} общо)
                     </span>
                     <div className="flex gap-2">
                         <Button
                             variant="outline"
                             size="sm"
-                            disabled={termPapers.current_page <= 1}
+                            disabled={specialties.current_page <= 1}
                             onClick={() =>
-                                goToPage(termPapers.current_page - 1)
+                                goToPage(specialties.current_page - 1)
                             }
                         >
                             Назад
@@ -275,10 +249,11 @@ export default function Index({ termPapers, filters }: Props) {
                             variant="outline"
                             size="sm"
                             disabled={
-                                termPapers.current_page >= termPapers.last_page
+                                specialties.current_page >=
+                                specialties.last_page
                             }
                             onClick={() =>
-                                goToPage(termPapers.current_page + 1)
+                                goToPage(specialties.current_page + 1)
                             }
                         >
                             Напред

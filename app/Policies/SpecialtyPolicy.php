@@ -2,18 +2,23 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Specialty;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class SpecialtyPolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        return $user->role === UserRole::ADMIN ? true : null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**
@@ -21,7 +26,7 @@ class SpecialtyPolicy
      */
     public function view(User $user, Specialty $specialty): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**
@@ -29,7 +34,7 @@ class SpecialtyPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**
@@ -37,7 +42,7 @@ class SpecialtyPolicy
      */
     public function update(User $user, Specialty $specialty): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**
@@ -45,7 +50,7 @@ class SpecialtyPolicy
      */
     public function delete(User $user, Specialty $specialty): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**
@@ -53,7 +58,7 @@ class SpecialtyPolicy
      */
     public function restore(User $user, Specialty $specialty): bool
     {
-        return false;
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**

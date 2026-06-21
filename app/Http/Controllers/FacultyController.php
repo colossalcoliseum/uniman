@@ -27,24 +27,31 @@ class FacultyController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('slug', 'like', "%{$search}%");
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            });
         }
-
+        if ($request->boolean('trashed')) {
+            $query->onlyTrashed();
+        }
         if ($request->filled('institution_id')) {
             $query->where('institution_id', $request->input('institution_id'));
         }
 
-        $institutions = $query->orderBy('name')->paginate(10);
+        $faculties = $query->with(['institution:id,name', 'dean:id,name'])
+            ->orderBy('name')
+            ->paginate(10);
 
-        return Inertia::render('institutions/index', ['institutions' => $institutions]);
+        return Inertia::render('faculties/index', ['faculties' => $faculties,    'filters' => ['trashed' => $request->boolean('trashed')],
+        ]);
 
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
         Gate::authorize('create', Faculty::class);
 
@@ -52,7 +59,7 @@ class FacultyController extends Controller
             [
                 'institutions' => Institution::select('id', 'name')->orderBy('name')->get(),
                 'countries' => Country::select('id', 'name')->orderBy('name')->get(),
-                'deans' => User::ofRole(UserRole::DEAN)->select('id', 'name')->orderBy('name')->get(),
+                'deans' => User::ofRole(UserRole::DEAN->value)->select('id', 'name')->orderBy('name')->get(),
 
             ]);
 
@@ -63,6 +70,7 @@ class FacultyController extends Controller
      */
     public function store(StoreFacultyRequest $request): RedirectResponse
     {
+        Gate::authorize('create', Faculty::class);
         Faculty::create($request->validated());
 
         return redirect()->route('faculties.index')
@@ -72,12 +80,12 @@ class FacultyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Faculty $faculty)
+    public function show(Faculty $faculty):Response
     {
         Gate::authorize('view', $faculty);
 
         return Inertia::render('faculties/show', [
-            'faculty' => $faculty,
+            'faculty' => $faculty->load(['institution:id,name', 'dean:id,name']),
         ]);
     }
 
@@ -92,15 +100,16 @@ class FacultyController extends Controller
             'faculty' => $faculty,
             'institutions' => Institution::select('id', 'name')->orderBy('name')->get(),
             'countries' => Country::select('id', 'name')->orderBy('name')->get(),
-            'deans' => User::ofRole(UserRole::DEAN)->select('id', 'name')->orderBy('name')->get(),
+            'deans' => User::ofRole(UserRole::DEAN->value)->select('id', 'name')->orderBy('name')->get(),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFacultyRequest $request, Faculty $faculty)
+    public function update(UpdateFacultyRequest $request, Faculty $faculty): RedirectResponse
     {
+        Gate::authorize('update', $faculty);
         $data = $request->validated();
         $faculty->update($data);
 
@@ -121,13 +130,11 @@ class FacultyController extends Controller
             ->with('success', 'Faculty Removed  Successful');
 
     }
-    public function restore(int $id): RedirectResponse
+    public function restore(Faculty $faculty): RedirectResponse
     {
-        $termPaper = Faculty::onlyTrashed()->findOrFail($id);
+        Gate::authorize('restore', $faculty);
 
-        Gate::authorize('restore', $termPaper);
-
-        $termPaper->restore();
+        $faculty->restore();
 
         return redirect()->route('faculties.index')
             ->with('success', 'Faculty Restored');

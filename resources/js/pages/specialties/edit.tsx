@@ -1,6 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,42 +12,32 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
 
-import facultyRoutes from '@/routes/faculties';
-import type { Faculty, UserOption, Country } from '@/types/models';
+import type { Specialty, UserOption } from '@/types/models';
+import specialtyRoutes from '@/routes/specialties';
 
-const { index, update } = facultyRoutes;
+const { index, update } = specialtyRoutes;
 
 interface Props {
-    faculty: Faculty;
+    specialty: Specialty;
     institutions: UserOption[];
-    countries: Country[];
-    deans: UserOption[];
 }
 
-export default function Edit({
-    faculty,
-    institutions,
-    countries,
-    deans,
-}: Props) {
+export default function Edit({ specialty, institutions }: Props) {
     const { data, setData, put, processing, errors } = useForm({
-        name: faculty.name,
-        slug: faculty.slug,
-        institution_id: String(faculty.institution_id),
-        country_id: String(faculty.country_id),
-        dean_id: String(faculty.dean_id),
+        name: specialty.name,
+        slug: specialty.slug,
+        institution_id: String(specialty.institution_id),
     });
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        put(update(faculty.id).url);
+        put(update(specialty.id).url);
     };
 
     return (
-        <AppLayout breadcrumbs={[{ title: 'Факултети', href: index().url }]}>
-            <Head title={`Редакция: ${faculty.name}`} />
+        <AppLayout breadcrumbs={[{ title: 'Специалности', href: index().url }]}>
+            <Head title={`Редакция: ${specialty.name}`} />
 
             <div className="p-6">
                 <form
@@ -84,7 +75,7 @@ export default function Edit({
                     </div>
 
                     {/* institution_id */}
-                    <div>
+                    <div className="col-span-2">
                         <Label htmlFor="institution_id">Институция</Label>
                         <Select
                             value={data.institution_id}
@@ -107,62 +98,6 @@ export default function Edit({
                         {errors.institution_id && (
                             <p className="text-sm text-destructive">
                                 {errors.institution_id}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* country_id */}
-                    <div>
-                        <Label htmlFor="country_id">Държава</Label>
-                        <Select
-                            value={data.country_id}
-                            onValueChange={(v) => setData('country_id', v)}
-                        >
-                            <SelectTrigger id="country_id">
-                                <SelectValue placeholder="Избери държава" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {countries.map((country) => (
-                                    <SelectItem
-                                        key={country.id}
-                                        value={String(country.id)}
-                                    >
-                                        {country.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.country_id && (
-                            <p className="text-sm text-destructive">
-                                {errors.country_id}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* dean_id */}
-                    <div className="col-span-2">
-                        <Label htmlFor="dean_id">Декан</Label>
-                        <Select
-                            value={data.dean_id}
-                            onValueChange={(v) => setData('dean_id', v)}
-                        >
-                            <SelectTrigger id="dean_id">
-                                <SelectValue placeholder="Избери декан" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {deans.map((dean) => (
-                                    <SelectItem
-                                        key={dean.id}
-                                        value={String(dean.id)}
-                                    >
-                                        {dean.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.dean_id && (
-                            <p className="text-sm text-destructive">
-                                {errors.dean_id}
                             </p>
                         )}
                     </div>

@@ -15,6 +15,15 @@ class Institution extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable =[
+        'name',
+        'slug',
+        'type',
+        'country_id',
+        'description',
+        'manager_id',
+        'logo',
+    ];
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

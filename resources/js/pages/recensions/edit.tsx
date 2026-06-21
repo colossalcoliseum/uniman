@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -10,171 +12,124 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 
-import termPaperRoutes from '@/routes/term-papers';
-import type { TermPaper, UserOption, Remark } from '@/types/models';
-import { TERM_PAPER_STATUS_LABELS } from '@/types/models';
+import recensionRoutes from '@/routes/recensions';
+import {
+    RECENSION_STATUS_LABELS
 
-const { index, update } = termPaperRoutes;
+
+
+} from '@/types/models';
+import type {Recension, UserOption, Remark} from '@/types/models';
+
+const { index, update } = recensionRoutes;
 
 interface Props {
-    termPaper: TermPaper;
-    teachers: UserOption[];
-    students: UserOption[];
+    recension: Recension;
+    reviewers: UserOption[];
     remarks: Remark[];
+    termPapers: UserOption[];
 }
 
 export default function Edit({
-    termPaper,
-    teachers,
-    students,
+    recension,
+    reviewers,
     remarks,
+    termPapers,
 }: Props) {
     const { data, setData, put, processing, errors } = useForm({
-        name: termPaper.name,
-        slug: termPaper.slug,
-        teacher_id: String(termPaper.teacher_id),
-        student_id: String(termPaper.student_id),
-        start_date: termPaper.start_date,
-        end_date: termPaper.end_date,
-        status: termPaper.status as string,
-        remark_id: termPaper.remark ? String(termPaper.remark) : '',
+        title: recension.title,
+        term_paper_id: String(recension.term_paper_id),
+        remark_id: recension.remark_id ? String(recension.remark_id) : '',
+        reviewer_id: String(recension.reviewer_id),
+        status: recension.status as string,
+        final_verdict: recension.final_verdict,
+        passed: recension.passed,
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        put(update(termPaper.id).url);
+        put(update(recension.id).url);
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[{ title: 'Term Papers', href: index().url }]}
-        >
-            <Head title={`Редакция: ${termPaper.name}`} />
+        <AppLayout breadcrumbs={[{ title: 'Рецензии', href: index().url }]}>
+            <Head title={`Редакция: ${recension.title}`} />
 
             <div className="p-6">
                 <form
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                     <div className="col-span-2">
-                        <Label htmlFor="name">Заглавие</Label>
-                        <Input
-                            id="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                        />
-                        {errors.name && (
-                            <p className="text-sm text-destructive">
-                                {errors.name}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* slug */}
+                    {/* title */}
                     <div className="col-span-2">
-                        <Label htmlFor="slug">Slug</Label>
+                        <Label htmlFor="title">Заглавие</Label>
                         <Input
-                            id="slug"
-                            value={data.slug}
-                            onChange={(e) => setData('slug', e.target.value)}
+                            id="title"
+                            value={data.title}
+                            onChange={(e) => setData('title', e.target.value)}
                         />
-                        {errors.slug && (
+                        {errors.title && (
                             <p className="text-sm text-destructive">
-                                {errors.slug}
+                                {errors.title}
                             </p>
                         )}
                     </div>
 
-                    {/* teacher_id */}
+                    {/* term_paper_id */}
                     <div>
-                        <Label htmlFor="teacher_id">Учител</Label>
+                        <Label htmlFor="term_paper_id">Курсова работа</Label>
                         <Select
-                            value={data.teacher_id}
-                            onValueChange={(v) => setData('teacher_id', v)}
+                            value={data.term_paper_id}
+                            onValueChange={(v) => setData('term_paper_id', v)}
                         >
-                            <SelectTrigger id="teacher_id">
-                                <SelectValue placeholder="Избери учител" />
+                            <SelectTrigger id="term_paper_id">
+                                <SelectValue placeholder="Избери курсова работа" />
                             </SelectTrigger>
                             <SelectContent>
-                                {teachers.map((teacher) => (
+                                {termPapers.map((termPaper) => (
                                     <SelectItem
-                                        key={teacher.id}
-                                        value={String(teacher.id)}
+                                        key={termPaper.id}
+                                        value={String(termPaper.id)}
                                     >
-                                        {teacher.name}
+                                        {termPaper.name}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.teacher_id && (
+                        {errors.term_paper_id && (
                             <p className="text-sm text-destructive">
-                                {errors.teacher_id}
+                                {errors.term_paper_id}
                             </p>
                         )}
                     </div>
 
-                    {/* student_id */}
+                    {/* reviewer_id */}
                     <div>
-                        <Label htmlFor="student_id">Студент</Label>
+                        <Label htmlFor="reviewer_id">Рецензент</Label>
                         <Select
-                            value={data.student_id}
-                            onValueChange={(v) => setData('student_id', v)}
+                            value={data.reviewer_id}
+                            onValueChange={(v) => setData('reviewer_id', v)}
                         >
-                            <SelectTrigger id="student_id">
-                                <SelectValue placeholder="Избери студент" />
+                            <SelectTrigger id="reviewer_id">
+                                <SelectValue placeholder="Избери рецензент" />
                             </SelectTrigger>
                             <SelectContent>
-                                {students.map((student) => (
+                                {reviewers.map((reviewer) => (
                                     <SelectItem
-                                        key={student.id}
-                                        value={String(student.id)}
+                                        key={reviewer.id}
+                                        value={String(reviewer.id)}
                                     >
-                                        {student.name}
+                                        {reviewer.name}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.student_id && (
+                        {errors.reviewer_id && (
                             <p className="text-sm text-destructive">
-                                {errors.student_id}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* start_date */}
-                    <div>
-                        <Label htmlFor="start_date">Начална дата</Label>
-                        <Input
-                            id="start_date"
-                            type="date"
-                            value={data.start_date}
-                            onChange={(e) =>
-                                setData('start_date', e.target.value)
-                            }
-                        />
-                        {errors.start_date && (
-                            <p className="text-sm text-destructive">
-                                {errors.start_date}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* end_date */}
-                    <div>
-                        <Label htmlFor="end_date">Крайна дата</Label>
-                        <Input
-                            id="end_date"
-                            type="date"
-                            value={data.end_date}
-                            onChange={(e) =>
-                                setData('end_date', e.target.value)
-                            }
-                        />
-                        {errors.end_date && (
-                            <p className="text-sm text-destructive">
-                                {errors.end_date}
+                                {errors.reviewer_id}
                             </p>
                         )}
                     </div>
@@ -190,7 +145,7 @@ export default function Edit({
                                 <SelectValue placeholder="Избери статус" />
                             </SelectTrigger>
                             <SelectContent>
-                                {Object.entries(TERM_PAPER_STATUS_LABELS).map(
+                                {Object.entries(RECENSION_STATUS_LABELS).map(
                                     ([value, label]) => (
                                         <SelectItem key={value} value={value}>
                                             {label}
@@ -230,6 +185,41 @@ export default function Edit({
                         {errors.remark_id && (
                             <p className="text-sm text-destructive">
                                 {errors.remark_id}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* final_verdict */}
+                    <div className="col-span-2">
+                        <Label htmlFor="final_verdict">Заключение</Label>
+                        <Textarea
+                            id="final_verdict"
+                            value={data.final_verdict}
+                            onChange={(e) =>
+                                setData('final_verdict', e.target.value)
+                            }
+                            rows={6}
+                        />
+                        {errors.final_verdict && (
+                            <p className="text-sm text-destructive">
+                                {errors.final_verdict}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* passed */}
+                    <div className="col-span-2 flex items-center gap-2">
+                        <Checkbox
+                            id="passed"
+                            checked={data.passed}
+                            onCheckedChange={(checked) =>
+                                setData('passed', checked === true)
+                            }
+                        />
+                        <Label htmlFor="passed">Издържана</Label>
+                        {errors.passed && (
+                            <p className="text-sm text-destructive">
+                                {errors.passed}
                             </p>
                         )}
                     </div>

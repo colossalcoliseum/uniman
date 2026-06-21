@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Enums\TermPaperStatus;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +14,16 @@ class TermPaper extends Model
     use HasFactory;
 
     use SoftDeletes;
-
+    protected $fillable = [
+        'name',
+        'slug',
+        'teacher_id',
+        'student_id',
+        'start_date',
+        'end_date',
+        'status',
+        'remark_id',
+    ];
     protected function casts(): array
     {
         return [
@@ -25,6 +32,7 @@ class TermPaper extends Model
             'end_date' => 'datetime',
         ];
     }
+
 
     public function teacher(): BelongsTo
     {
@@ -39,7 +47,9 @@ class TermPaper extends Model
     public function remark(): BelongsTo
     {
         return $this->belongsTo(Remark::class);
-    }  public function institution(): BelongsTo
+    }
+
+    public function institution(): BelongsTo
     {
         return $this->belongsTo(Remark::class);
     }

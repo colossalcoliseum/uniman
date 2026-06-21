@@ -39,9 +39,12 @@ class TermPaperController extends Controller
         if ($request->filled('teacher_id')) {
             $query->where('teacher_id', $request->input('teacher_id'));
         }
+        if ($request->boolean('trashed')) {
+            $query->onlyTrashed();
+        }
         $termPapers = $query->with('teacher:id,name', 'student:id,name', 'remark:id,name')->orderBy('name')->paginate(10);
 
-        return Inertia::render('termPapers/index', ['termPapers' => $termPapers]);
+        return Inertia::render('termPapers/index', ['termPapers' => $termPapers, 'filters' => ['trashed' => $request->boolean('trashed')]]);
 
     }
 
