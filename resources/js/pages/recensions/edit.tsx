@@ -47,6 +47,11 @@ export default function Edit({
         status: recension.status as string,
         final_verdict: recension.final_verdict,
         passed: recension.passed,
+        plagiarism_percentage:
+            recension.plagiarism_percentage !== null
+                ? String(recension.plagiarism_percentage)
+                : '',
+        genai_status: recension.genai_status as string,
     });
 
     const handleSubmit = (e: FormEvent) => {

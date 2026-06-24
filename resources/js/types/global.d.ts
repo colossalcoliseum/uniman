@@ -5,6 +5,7 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            can: Can;
             sidebarOpen: boolean;
             [key: string]: unknown;
         };

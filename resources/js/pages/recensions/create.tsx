@@ -16,11 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 
 import recensionRoutes from '@/routes/recensions';
-import {
-    RECENSION_STATUS_LABELS
 
-
-} from '@/types/models';
 import type {UserOption, Remark} from '@/types/models';
 
 const { index, store } = recensionRoutes;
@@ -30,7 +26,10 @@ interface Props {
     remarks: Remark[];
     termPapers: UserOption[]; // {id, name} - само избраните колони от TermPaper::select('id', 'name')
 }
-
+import {
+    RECENSION_STATUS_LABELS,
+    GENAI_CHECK_STATUS_LABELS,
+} from '@/types/models';
 export default function Create({ reviewers, remarks, termPapers }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
@@ -40,6 +39,8 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
         status: '',
         final_verdict: '',
         passed: false,
+        plagiarism_percentage: '',
+        genai_status: 'not_checked',
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -181,7 +182,53 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                             </p>
                         )}
                     </div>
+                    <div>
+                        <Label htmlFor="plagiarism_percentage">
+                            Плагиатство (%)
+                        </Label>
+                        <Input
+                            id="plagiarism_percentage"
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={data.plagiarism_percentage}
+                            onChange={(e) =>
+                                setData('plagiarism_percentage', e.target.value)
+                            }
+                        />
+                        {errors.plagiarism_percentage && (
+                            <p className="text-sm text-destructive">
+                                {errors.plagiarism_percentage}
+                            </p>
+                        )}
+                    </div>
 
+                    {/* genai_status */}
+                    <div>
+                        <Label htmlFor="genai_status">GenAI проверка</Label>
+                        <Select
+                            value={data.genai_status}
+                            onValueChange={(v) => setData('genai_status', v)}
+                        >
+                            <SelectTrigger id="genai_status">
+                                <SelectValue placeholder="Избери статус" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Object.entries(GENAI_CHECK_STATUS_LABELS).map(
+                                    ([value, label]) => (
+                                        <SelectItem key={value} value={value}>
+                                            {label}
+                                        </SelectItem>
+                                    ),
+                                )}
+                            </SelectContent>
+                        </Select>
+                        {errors.genai_status && (
+                            <p className="text-sm text-destructive">
+                                {errors.genai_status}
+                            </p>
+                        )}
+                    </div>
                     {/* final_verdict */}
                     <div className="col-span-2">
                         <Label htmlFor="final_verdict">Заключение</Label>

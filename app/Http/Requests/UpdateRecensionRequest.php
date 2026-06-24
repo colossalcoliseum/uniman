@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GenAiCheckStatus;
 use App\Enums\RecensionStatus;
 use App\Enums\UserType;
 use App\Models\Remark;
@@ -35,6 +36,8 @@ class UpdateRecensionRequest extends FormRequest
             'status' => ['required', Rule::enum(RecensionStatus::class)],
             'final_verdict' => ['required', 'string', 'max:25500'],
             'passed' => ['required', 'boolean'],
+            'plagiarism_percentage' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'genai_status' => ['required', Rule::enum(GenAiCheckStatus::class)],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\TermPaperStatus;
 use App\Enums\UserRole;
 use App\Enums\UserType;
 use App\Models\TermPaper;
@@ -19,7 +20,7 @@ class TermPaperPolicy
 
     public function viewAny(User $user): bool
     {
-        return in_array($user->type, [UserType::TEACHER], true);
+        return in_array($user->type, [UserType::TEACHER, UserType::STUDENT], true);
     }
 
     /**
@@ -27,7 +28,10 @@ class TermPaperPolicy
      */
     public function view(User $user, TermPaper $termPaper): bool
     {
-        return $termPaper->teacher_id === $user->id || $termPaper->student_id === $user->id;
+        return $termPaper->teacher_id === $user->id
+            || $termPaper->student_id === $user->id
+            || ($user->type === UserType::STUDENT && $termPaper->student_id === null)
+            || $termPaper->recensions()->where('reviewer_id', $user->id)->exists();
     }
 
     /**
@@ -71,5 +75,11 @@ class TermPaperPolicy
     public function forceDelete(User $user, TermPaper $termPaper): bool
     {
         return false;
+    }
+    public function claim(User $user, TermPaper $termPaper): bool
+    {
+        return $user->type === UserType::STUDENT
+            && $termPaper->student_id === null
+            && $termPaper->status === TermPaperStatus::AVAILABLE;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Enums\UserType;
 use App\Http\Requests\StoreRecensionRequest;
 use App\Http\Requests\UpdateRecensionRequest;
@@ -38,14 +39,23 @@ class RecensionController extends Controller
             $query->where('reviewer_id', $request->input('reviewer_id'));
         }
 
+        $user = $request->user();
+        $isAdmin = $user->role === UserRole::ADMIN;
+        $isOverseer = in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
+
+        if (! $isAdmin && ! $isOverseer) {
+            $query->where('reviewer_id', $user->id);
+        }
+
         $recensions = $query->with(['reviewer:id,name', 'remark:id,name', 'termPaper:id,name'])
             ->orderBy('title')
             ->paginate(10);
 
-        return Inertia::render('recensions/index', ['recensions' => $recensions,    'filters' => ['trashed' => $request->boolean('trashed')],
+        return Inertia::render('recensions/index', [
+            'recensions' => $recensions,
+            'filters' => ['trashed' => $request->boolean('trashed')],
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      */

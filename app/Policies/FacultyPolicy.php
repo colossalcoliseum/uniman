@@ -42,7 +42,7 @@ class FacultyPolicy
      */
     public function update(User $user, Faculty $faculty): bool
     {
-        return $this->$faculty->dean_id === $this->$user->id;
+        return $faculty->dean_id === $this->$user->id;
     }
 
     /**

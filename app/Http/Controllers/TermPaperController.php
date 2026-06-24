@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TermPaperStatus;
 use App\Enums\UserType;
 use App\Http\Requests\StoreTermPaperRequest;
 use App\Http\Requests\UpdateTermPaperRequest;
@@ -79,14 +80,14 @@ class TermPaperController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TermPaper $termPaper): Response
-    {
-        Gate::authorize('view', $termPaper);
+        public function show(TermPaper $termPaper): Response
+        {
+            Gate::authorize('view', $termPaper);
 
-        return Inertia::render('termPapers/show', [
-            'termPaper' => $termPaper,
-        ]);
-    }
+            return Inertia::render('termPapers/show', [
+                'termPaper' =>     $termPaper->load(['statusHistories', 'teacher', 'student', 'remark']),
+            ]);
+        }
 
     /**
      * Show the form for editing the specified resource.
@@ -136,5 +137,18 @@ class TermPaperController extends Controller
 
         return redirect()->route('term-papers.index')
             ->with('success', 'Term Paper Restored');
+    }
+    public function claim(TermPaper $termPaper): RedirectResponse
+    {
+        Gate::authorize('claim', $termPaper);
+
+        $termPaper->update([
+            'student_id' => auth()->id(),
+            'status' => TermPaperStatus::PENDING,
+            'claimed_at' => now(),
+        ]);
+
+        return redirect()->route('term-papers.index')
+            ->with('success', 'Заявихте темата успешно');
     }
 }

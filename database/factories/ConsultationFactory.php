@@ -23,8 +23,8 @@ class ConsultationFactory extends Factory
             'term_paper_id' => TermPaper::inRandomOrder()->value('id'),
             'teacher_id' => User::where('type', UserType::TEACHER->value)->inRandomOrder()->value('id'),
             'student_id' => User::where('type', UserType::STUDENT->value)->inRandomOrder()->value('id'),
-            'starts_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
-            'ends_at' => $this->faker->dateTimeBetween('now', '+2 months'),
+            'starts_at' => $this->faker->dateTimeBetween('-1 hour', 'now'),
+            'ends_at' => $this->faker->dateTimeBetween('now', '+2 hours'),
             'type' => $this->faker->randomElement(['online', 'in_person']),
         ];
     }

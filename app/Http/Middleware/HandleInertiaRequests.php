@@ -2,7 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserRole;
+use App\Models\Consultation;
+use App\Models\Faculty;
+use App\Models\Institution;
+use App\Models\Recension;
+use App\Models\Specialty;
+use App\Models\TermPaper;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -35,13 +44,40 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'can' => $request->user() ? [
+                'termPapers' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', TermPaper::class),
+                ],
+                'consultations' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', Consultation::class),
+                ],
+                'recensions' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', Recension::class),
+                ],
+                'specialties' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', Specialty::class),
+                ],
+                'faculties' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', Faculty::class),
+                ],
+                'institutions' => [
+                    'viewAny' => Gate::forUser($user)->allows('viewAny', Institution::class),
+                ],
+                'users' => [
+                    'viewTeachers' => Gate::forUser($user)->allows('viewTeachers', User::class),
+                    'viewStudents' => Gate::forUser($user)->allows('viewStudents', User::class),
+                    'viewIndividualProfiles' => $user->role === UserRole::RECTOR,
+                ],
+            ] : [],
+
         ];
     }
 }

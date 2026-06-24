@@ -17,23 +17,20 @@ import AppLayout from '@/layouts/app-layout';
 import consultationRoutes from '@/routes/consultations';
 import {
     CONSULTATION_STATUS_LABELS,
-    CONSULTATION_TYPE_LABELS
-
+    CONSULTATION_TYPE_LABELS,
 } from '@/types/models';
-import type {UserOption} from '@/types/models';
+import type { UserOption } from '@/types/models';
 
 const { index, store } = consultationRoutes;
 
 interface Props {
-    teachers: UserOption[];
     students: UserOption[];
     termPapers: UserOption[];
 }
 
-export default function Create({ teachers, students, termPapers }: Props) {
+export default function Create({ students, termPapers }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         term_paper_id: '',
-        teacher_id: '',
         student_id: '',
         starts_at: '',
         ends_at: '',
@@ -84,56 +81,29 @@ export default function Create({ teachers, students, termPapers }: Props) {
                             </p>
                         )}
                     </div>
-
-                    {/* teacher_id */}
-                    <div>
-                        <Label htmlFor="teacher_id">Учител</Label>
-                        <Select
-                            value={data.teacher_id}
-                            onValueChange={(v) => setData('teacher_id', v)}
-                        >
-                            <SelectTrigger id="teacher_id">
-                                <SelectValue placeholder="Избери учител" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {teachers.map((teacher) => (
-                                    <SelectItem
-                                        key={teacher.id}
-                                        value={String(teacher.id)}
-                                    >
-                                        {teacher.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.teacher_id && (
-                            <p className="text-sm text-destructive">
-                                {errors.teacher_id}
-                            </p>
-                        )}
-                    </div>
-
                     {/* student_id */}
                     <div>
-                        <Label htmlFor="student_id">Студент</Label>
-                        <Select
-                            value={data.student_id}
-                            onValueChange={(v) => setData('student_id', v)}
-                        >
-                            <SelectTrigger id="student_id">
-                                <SelectValue placeholder="Избери студент" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {students.map((student) => (
-                                    <SelectItem
-                                        key={student.id}
-                                        value={String(student.id)}
-                                    >
-                                        {student.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <div className="col-span-2">
+                            <Label htmlFor="student_id">Студент</Label>
+                            <Select
+                                value={data.student_id}
+                                onValueChange={(v) => setData('student_id', v)}
+                            >
+                                <SelectTrigger id="student_id">
+                                    <SelectValue placeholder="Избери студент" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {students.map((student) => (
+                                        <SelectItem
+                                            key={student.id}
+                                            value={String(student.id)}
+                                        >
+                                            {student.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                         {errors.student_id && (
                             <p className="text-sm text-destructive">
                                 {errors.student_id}

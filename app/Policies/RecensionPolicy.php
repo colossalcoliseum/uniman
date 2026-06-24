@@ -19,7 +19,8 @@ class RecensionPolicy
 
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
+        return in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true)
+            || $user->type === UserType::TEACHER->value;
     }
 
     /**
@@ -27,7 +28,8 @@ class RecensionPolicy
      */
     public function view(User $user, Recension $recension): bool
     {
-        return $recension->reviewer_id === $user->id;
+        return $recension->reviewer_id === $user->id
+            || in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
     }
 
     /**

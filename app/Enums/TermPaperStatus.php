@@ -11,6 +11,7 @@ enum TermPaperStatus: string
     case IN_REVIEW = 'in_review';
     case DEFENDED = 'defended';
     case FAILED = 'failed';
+    case AVAILABLE = 'available';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum TermPaperStatus: string
             self::IN_REVIEW => 'In Review',
             self::DEFENDED => 'Defended',
             self::FAILED => 'Failed',
+            self::AVAILABLE => 'Available',
         };
     }
 }

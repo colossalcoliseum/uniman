@@ -27,21 +27,18 @@ const { index, update } = consultationRoutes;
 
 interface Props {
     consultation: Consultation;
-    teachers: UserOption[];
-    students: UserOption[];
+     students: UserOption[];
     termPapers: UserOption[];
 }
 
 export default function Edit({
     consultation,
-    teachers,
-    students,
+     students,
     termPapers,
 }: Props) {
     const { data, setData, put, processing, errors } = useForm({
         term_paper_id: String(consultation.term_paper_id),
-        teacher_id: String(consultation.teacher_id),
-        student_id: String(consultation.student_id),
+         student_id: String(consultation.student_id),
         starts_at: consultation.starts_at ?? '',
         ends_at: consultation.ends_at ?? '',
         type: consultation.type as string,
@@ -91,35 +88,6 @@ export default function Edit({
                             </p>
                         )}
                     </div>
-
-                    {/* teacher_id */}
-                    <div>
-                        <Label htmlFor="teacher_id">Учител</Label>
-                        <Select
-                            value={data.teacher_id}
-                            onValueChange={(v) => setData('teacher_id', v)}
-                        >
-                            <SelectTrigger id="teacher_id">
-                                <SelectValue placeholder="Избери учител" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {teachers.map((teacher) => (
-                                    <SelectItem
-                                        key={teacher.id}
-                                        value={String(teacher.id)}
-                                    >
-                                        {teacher.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.teacher_id && (
-                            <p className="text-sm text-destructive">
-                                {errors.teacher_id}
-                            </p>
-                        )}
-                    </div>
-
                     {/* student_id */}
                     <div>
                         <Label htmlFor="student_id">Студент</Label>

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->text('final_verdict')->nullable();
             $table->boolean('passed')->nullable();
+            $table->unsignedTinyInteger('plagiarism_percentage')->nullable();
+            $table->string('genai_status')->default('not_checked');
             $table->timestamps();
             $table->softDeletes();
 

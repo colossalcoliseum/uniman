@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Consultation;
+use App\Models\Recension;
+use App\Observers\ConsultationObserver;
+use App\Observers\RecensionObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         Model::preventSilentlyDiscardingAttributes($this->app->isLocal());
         Gate::policy(User::class, UserPolicy::class);
+        Consultation::observe(ConsultationObserver::class);
+        Recension::observe(RecensionObserver::class);
     }
 
     /**

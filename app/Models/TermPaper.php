@@ -6,6 +6,7 @@ use App\Enums\TermPaperStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TermPaper extends Model
@@ -23,6 +24,9 @@ class TermPaper extends Model
         'end_date',
         'status',
         'remark_id',
+        'plagiarism_percentage',
+        'genai_status',
+        'file_path',
     ];
     protected function casts(): array
     {
@@ -51,11 +55,19 @@ class TermPaper extends Model
 
     public function institution(): BelongsTo
     {
-        return $this->belongsTo(Remark::class);
+        return $this->belongsTo(Institution::class);
+    }
+    public function recensions(): HasMany
+    {
+        return $this->hasMany(Recension::class);
     }
 
     public function faculty(): BelongsTo
     {
-        return $this->belongsTo(Remark::class);
+        return $this->belongsTo(Faculty::class);
+    }
+    public function statusHistories(): HasMany
+    {
+        return $this->hasMany(TermPaperStatusHistory::class)->orderBy('happened_at');
     }
 }

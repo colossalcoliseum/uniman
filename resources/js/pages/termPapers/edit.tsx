@@ -31,7 +31,7 @@ export default function Edit({
     students,
     remarks,
 }: Props) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: termPaper.name,
         slug: termPaper.slug,
         teacher_id: String(termPaper.teacher_id),
@@ -40,17 +40,23 @@ export default function Edit({
         end_date: termPaper.end_date,
         status: termPaper.status as string,
         remark_id: termPaper.remark ? String(termPaper.remark) : '',
+        // Файлът се препраща само ако потребителят избере нов; ако остане
+        // null, съществуващият file_path в базата не се презаписва
+        // (реалната логика за това предстои на backend ниво по-късно).
+        file: null as File | null,
+        // Laravel очаква PUT/PATCH да дойде като _method поле, когато
+        // заявката носи файл - HTML formите не поддържат multipart/form-data
+        // през истински PUT заявки.
+        _method: 'put',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update(termPaper.id).url);
+        post(update(termPaper.id).url, { forceFormData: true });
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[{ title: 'Term Papers', href: index().url }]}
-        >
+        <AppLayout breadcrumbs={[{ title: 'Term Papers', href: index().url }]}>
             <Head title={`Редакция: ${termPaper.name}`} />
 
             <div className="p-6">
@@ -58,7 +64,7 @@ export default function Edit({
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                     <div className="col-span-2">
+                    <div className="col-span-2">
                         <Label htmlFor="name">Заглавие</Label>
                         <Input
                             id="name"
@@ -230,6 +236,29 @@ export default function Edit({
                         {errors.remark_id && (
                             <p className="text-sm text-destructive">
                                 {errors.remark_id}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* file */}
+                    <div className="col-span-2">
+                        <Label htmlFor="file">Файл на дипломната работа</Label>
+                        {termPaper.file_path && (
+                            <p className="mb-1 text-sm text-muted-foreground">
+                                Текущ файл качен. Избери нов, за да го замениш.
+                            </p>
+                        )}
+                        <Input
+                            id="file"
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) =>
+                                setData('file', e.target.files?.[0] ?? null)
+                            }
+                        />
+                        {errors.file && (
+                            <p className="text-sm text-destructive">
+                                {errors.file}
                             </p>
                         )}
                     </div>

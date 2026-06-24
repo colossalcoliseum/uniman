@@ -47,7 +47,9 @@ class ConsultationController extends Controller
             ->orderBy('starts_at')
             ->paginate(10);
 
-        return Inertia::render('consultations/index', ['consultations' => $consultations,    'filters' => ['trashed' => $request->boolean('trashed')],
+        return Inertia::render('consultations/index', [
+            'consultations' => $consultations,
+            'filters' => ['trashed' => $request->boolean('trashed')],
         ]);
     }
 
@@ -56,12 +58,17 @@ class ConsultationController extends Controller
      */
     public function create(): Response
     {
+
         Gate::authorize('create', Consultation::class);
 
+        $termPapersQuery = TermPaper::whereNotNull('student_id');
+        if (auth()->user()->role !== UserRole::ADMIN) {
+            $termPapersQuery->where('teacher_id', auth()->id());
+        }
+
         return Inertia::render('consultations/create', [
-            'teachers' => User::where('type', UserType::TEACHER->value)->select('id', 'name')->get(),
             'students' => User::where('type', UserType::STUDENT->value)->select('id', 'name')->get(),
-            'termPapers' => TermPaper::select('id', 'name')->get(),
+            'termPapers' => $termPapersQuery->select('id', 'name')->get(),
         ]);
     }
 
@@ -72,6 +79,16 @@ class ConsultationController extends Controller
     {
         Gate::authorize('create', Consultation::class);
         $data = $request->validated();
+
+        $termPaper = TermPaper::findOrFail($data['term_paper_id']);
+
+        // защита - само учителят на темата (или admin) може да създава консултация за нея
+        abort_if(
+            $termPaper->teacher_id !== auth()->id() && auth()->user()->role !== UserRole::ADMIN,
+            403
+        );
+
+        $data['teacher_id'] = $termPaper->teacher_id;
 
         Consultation::create($data);
 
@@ -97,12 +114,17 @@ class ConsultationController extends Controller
     public function edit(Consultation $consultation): Response
     {
         Gate::authorize('update', $consultation);
+        $termPapersQuery = TermPaper::whereNotNull('student_id');
+        if (auth()->user()->role !== UserRole::ADMIN) {
+            $termPapersQuery->where('teacher_id', auth()->id());
+        }
 
         return Inertia::render('consultations/edit', [
             'consultation' => $consultation,
             'teachers' => User::where('type', UserType::TEACHER->value)->select('id', 'name')->get(),
             'students' => User::where('type', UserType::STUDENT->value)->select('id', 'name')->get(),
-            'termPapers' => TermPaper::select('id', 'name')->get(),
+            'termPapers' => $termPapersQuery->select('id', 'name')->get(),
+
         ]);
     }
 
@@ -113,6 +135,14 @@ class ConsultationController extends Controller
     {
         Gate::authorize('update', $consultation);
         $data = $request->validated();
+
+        $termPaper = TermPaper::findOrFail($data['term_paper_id']);
+        abort_if(
+            $termPaper->teacher_id !== auth()->id() && auth()->user()->role !== UserRole::ADMIN,
+            403
+        );
+        $data['teacher_id'] = $termPaper->teacher_id;
+
         $consultation->update($data);
 
         return redirect()->route('consultations.index')
@@ -129,5 +159,41 @@ class ConsultationController extends Controller
 
         return redirect()->route('consultations.index')
             ->with('success', 'Consultation Removed');
+    }
+    public function calendar(): Response
+    {
+        Gate::authorize('viewAny', Consultation::class);
+
+        return Inertia::render('consultations/calendar', [
+            'teachers' => User::where('type', UserType::TEACHER->value)->select('id', 'name')->get(),
+        ]);
+    }
+
+    public function calendarData(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+        $query = Consultation::query();
+
+        if ($user->role !== UserRole::ADMIN) {
+            $query->where(function ($query) use ($user) {
+                $query->where('teacher_id', $user->id)
+                    ->orWhere('student_id', $user->id);
+            });
+        }
+
+        if ($request->filled('teacher_id')) {
+            $query->where('teacher_id', $request->input('teacher_id'));
+        }
+
+        $events = $query->with(['teacher:id,name', 'student:id,name'])
+            ->get()
+            ->map(fn (Consultation $consultation) => [
+                'id' => $consultation->id,
+                'title' => $consultation->student?->name ?? 'Консултация',
+                'start' => $consultation->starts_at,
+                'end' => $consultation->ends_at,
+            ]);
+
+        return response()->json($events);
     }
 }

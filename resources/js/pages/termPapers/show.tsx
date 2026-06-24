@@ -1,11 +1,14 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
+import TermPaperTimeline from '@/components/term-paper-timeline';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-
 import termPaperRoutes from '@/routes/term-papers';
+import type { Auth } from '@/types';
 import { TERM_PAPER_STATUS_LABELS  } from '@/types/models';
 import type {TermPaper} from '@/types/models';
 
@@ -16,6 +19,17 @@ interface Props {
 }
 
 export default function Show({ termPaper }: Props) {
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const { claim } = termPaperRoutes;
+
+    const canClaim =
+        auth.user?.type === 'student' &&
+        termPaper.status === 'available' &&
+        !termPaper.student;
+
+    const handleClaim = () => {
+        router.post(claim(termPaper.id).url);
+    };
     return (
         <AppLayout
             breadcrumbs={[{ title: 'Курсови работи', href: index().url }]}
@@ -87,7 +101,16 @@ export default function Show({ termPaper }: Props) {
                         </div>
                     </CardContent>
                 </Card>
-
+                <Card className="mt-4 max-w-4xl">
+                    <CardHeader>
+                        <CardTitle>Напредък</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <TermPaperTimeline
+                            histories={termPaper.status_histories ?? []}
+                        />
+                    </CardContent>
+                </Card>
                 <div className="mt-4 flex gap-2">
                     <Button variant="outline" asChild>
                         <Link href={index().url}>Назад към списъка</Link>

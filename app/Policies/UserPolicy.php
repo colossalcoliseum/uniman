@@ -71,6 +71,18 @@ class UserPolicy
     {
         return false;
     }
+    public function viewTeachers(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * Списъкът със студенти е ограничен - видим единствено за ректора и админа
+     */
+    public function viewStudents(User $user): bool
+    {
+        return $user->role === UserRole::RECTOR;
+    }
     public function changeRole(User $user, User $model): bool
     {
         return false;

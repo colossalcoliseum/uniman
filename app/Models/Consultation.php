@@ -13,6 +13,19 @@ class Consultation extends Model
     /** @use HasFactory<\Database\Factories\ConsultationFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'term_paper_id',
+        'student_id',
+        'teacher_id',
+        'starts_at',
+        'ends_at',
+        'type',
+        'status',
+        'location',
+        'notes',
+        'attended',
+    ];
+
     public function termPaper(): BelongsTo
     {
         return $this->belongsTo(TermPaper::class);

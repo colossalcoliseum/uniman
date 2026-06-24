@@ -21,6 +21,8 @@ return new class extends Migration
             $table->timestamp('end_date')->nullable();
             $table->string('status')->default('pending');
             $table->foreignId('remark_id')->nullable()->constrained('remarks');
+            $table->timestamp('claimed_at')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

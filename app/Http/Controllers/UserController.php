@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Http\Requests\ChangeUserRoleRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -16,30 +17,60 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Списък с учители - видим за всеки автентикиран потребител.
      */
-    public function index(Request $request): Response
+    public function teachers(Request $request): Response
     {
-        Gate::authorize('viewAny', User::class);
-        $query = User::query();
+        Gate::authorize('viewTeachers', User::class);
+
+        $users = $this->filteredQuery($request, UserType::TEACHER)
+            ->paginate(30)
+            ->withQueryString();
+
+        return Inertia::render('users/teachers', [
+            'users' => $users,
+            'filters' => ['search' => $request->input('search'), 'trashed' => $request->boolean('trashed')],
+        ]);
+    }
+
+    /**
+     * Списък със студенти - видим единствено за ректора (вж. UserPolicy::viewStudents).
+     */
+    public function students(Request $request): Response
+    {
+        Gate::authorize('viewStudents', User::class);
+
+        $users = $this->filteredQuery($request, UserType::STUDENT)
+            ->paginate(30)
+            ->withQueryString();
+
+        return Inertia::render('users/students', [
+            'users' => $users,
+            'filters' => ['search' => $request->input('search'), 'trashed' => $request->boolean('trashed')],
+        ]);
+    }
+
+    /**
+     * Обща заявка, споделена между teachers() и students() - филтрира
+     * по тип потребител плюс по търсене/изтрити записи.
+     */
+    private function filteredQuery(Request $request, UserType $type)
+    {
+        $query = User::query()->where('type', $type->value);
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
         }
 
-        if ($request->filled('role')) {
-            $query->where('role', $request->input('role'));
-        }
         if ($request->boolean('trashed')) {
             $query->onlyTrashed();
         }
 
-        $users = $query->orderBy('name')->paginate(20);
-
-        return Inertia::render('users/index', ['users' => $users,    'filters' => ['trashed' => $request->boolean('trashed')]]);
-
+        return $query->orderBy('name');
     }
 
     /**
@@ -57,11 +88,13 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
+        Gate::authorize('create', User::class);
+
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         User::create($data);
 
-        return redirect()->route('users.index')
+        return redirect()->route('users.teachers')
             ->with('success', 'User Created Successfull');
     }
 
@@ -105,7 +138,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('users.index')
+        return redirect()->route('users.teachers')
             ->with('success', 'User Update Successfully');
     }
 
@@ -117,7 +150,7 @@ class UserController extends Controller
         Gate::authorize('delete', $user);
         $user->delete();
 
-        return redirect()->route('users.index')
+        return redirect()->route('users.teachers')
             ->with('success', 'User Deleted');
     }
 
@@ -150,7 +183,7 @@ class UserController extends Controller
 
         $user->restore();
 
-        return redirect()->route('users.index')
+        return redirect()->route('users.teachers')
             ->with('success', 'User Restored');
     }
 }

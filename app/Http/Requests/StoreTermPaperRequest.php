@@ -30,7 +30,7 @@ class StoreTermPaperRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'alpha_dash', 'max:255'],
             'teacher_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::TEACHER->value)],
-            'student_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::STUDENT->value)],
+            'student_id' => ['nullable', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::STUDENT->value)],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
             'status' => ['required', Rule::enum(TermPaperStatus::class)],

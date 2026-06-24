@@ -29,7 +29,6 @@ class UpdateConsultationRequest extends FormRequest
     {
         return [
             'term_paper_id' => ['required', 'integer', Rule::exists(TermPaper::class, 'id')],
-            'teacher_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::TEACHER->value)],
             'student_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::STUDENT->value)],
             'starts_at' => ['required', 'date'],
             'ends_at' => ['required', 'date'],

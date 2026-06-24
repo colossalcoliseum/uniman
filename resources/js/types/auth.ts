@@ -22,3 +22,17 @@ export type TwoFactorSetupData = {
 export type TwoFactorSecretKey = {
     secretKey: string;
 };
+
+export type Can = {
+    termPapers: { viewAny: boolean };
+    consultations: { viewAny: boolean };
+    recensions: { viewAny: boolean };
+    specialties: { viewAny: boolean };
+    faculties: { viewAny: boolean };
+    institutions: { viewAny: boolean };
+    users: {
+        viewTeachers: boolean;
+        viewStudents: boolean;
+        viewIndividualProfiles: boolean;
+    };
+};

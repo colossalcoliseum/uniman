@@ -9,7 +9,6 @@ use App\Models\TermPaper;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
 class StoreConsultationRequest extends FormRequest
 {
     /**
@@ -29,7 +28,6 @@ class StoreConsultationRequest extends FormRequest
     {
         return [
             'term_paper_id' => ['required', 'integer', Rule::exists(TermPaper::class, 'id')],
-            'teacher_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::TEACHER->value)],
             'student_id' => ['required', 'integer', Rule::exists(User::class, 'id')->where('type', UserType::STUDENT->value)],
             'starts_at' => ['required', 'date'],
             'ends_at' => ['required', 'date'],

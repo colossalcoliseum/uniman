@@ -1,24 +1,14 @@
-import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import {
-    type ColumnDef,
+
     flexRender,
     getCoreRowModel,
-    useReactTable,
+    useReactTable
 } from '@tanstack/react-table';
+import type {ColumnDef} from '@tanstack/react-table';
+import { useState } from 'react';
 
-import AppLayout from '@/layouts/app-layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,15 +20,28 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-    TERM_PAPER_STATUS_LABELS,
-    type TermPaper,
-    type Paginated,
-} from '@/types/models';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
 import termPaperRoutes from '@/routes/term-papers';
+import type { Auth } from '@/types';
+import {
+    TERM_PAPER_STATUS_LABELS
 
-const { index, create, edit, show, destroy, restore } = termPaperRoutes;
+
+} from '@/types/models';
+import type {TermPaper, Paginated} from '@/types/models';
+
+const { index, create, edit, show, destroy, restore, claim } = termPaperRoutes;
 
 interface Props {
     termPapers: Paginated<TermPaper>;
@@ -82,6 +85,11 @@ export default function Index({ termPapers, filters }: Props) {
         router.post(restore(id).url);
     };
 
+    const handleClaim = (id: number) => {
+        router.post(claim(id).url);
+    };
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const isStudent = auth.user?.type === 'student';
     const columns: ColumnDef<TermPaper>[] = [
         { accessorKey: 'name', header: 'Заглавие' },
         {
@@ -123,6 +131,18 @@ export default function Index({ termPapers, filters }: Props) {
                         </Button>
                     ) : (
                         <>
+                            {isStudent &&
+                                row.original.status === 'available' &&
+                                !row.original.student && (
+                                    <Button
+                                        size="sm"
+                                        onClick={() =>
+                                            handleClaim(row.original.id)
+                                        }
+                                    >
+                                        Избирам тема
+                                    </Button>
+                                )}
                             <Link
                                 href={show(row.original.id).url}
                                 className="text-sm underline"

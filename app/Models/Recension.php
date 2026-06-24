@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GenAiCheckStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,7 +22,13 @@ class Recension extends Model
         'status',
         'final_verdict',
         'passed',
+        'plagiarism_percentage',
+        'genai_status',
     ];
+    protected $casts = [
+        'genai_status' => GenAiCheckStatus::class,
+    ];
+
     public function termPaper(): BelongsTo
     {
         return $this->belongsTo(TermPaper::class);

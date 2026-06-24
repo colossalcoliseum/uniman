@@ -16,6 +16,7 @@ class ConsultationPolicy
 
     public function before(User $user, string $ability): ?bool
     {
+
         return $user->role === UserRole::ADMIN ? true : null;
     }
 

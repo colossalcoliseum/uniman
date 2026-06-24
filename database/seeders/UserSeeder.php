@@ -13,17 +13,17 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         /* Единични записи */
-        User::factory()->admin()->create(['email' => 'admin@admin.com', 'password'=>'123123123']);
-        User::factory()->rector()->count(5)->create();
-        User::factory()->dean()->create(['email' => 'dean@uni.com']);
+        User::factory()->admin()->create(['email' => 'admin@admin.com', 'password' => '123123123']);
+        User::factory()->rector()->count(5)->create(['password'=>'123123123']);
+        User::factory()->dean()->create(['email' => 'dean@uni.com','password'=>'123123123']);
 
         /* Преподаватели */
-        User::factory()->professor()->count(5)->create();
-        User::factory()->associateProfessor()->count(15)->create();
-        User::factory()->assistant()->count(20)->create();
+        User::factory()->professor()->count(5)->create(['password' => '123123123']);
+        User::factory()->associateProfessor()->count(15)->create(['password' => '123123123']);
+        User::factory()->assistant()->count(20)->create(['password' => '123123123']);
 
         /* Студенти */
-        User::factory()->student()->count(50)->create();
+        User::factory()->student()->count(50)->create(['password' => '123123123']);
 
     }
 }

@@ -16,7 +16,8 @@ export type TermPaperStatus =
     | 'revision_required'
     | 'in_review'
     | 'defended'
-    | 'failed';
+    | 'failed'
+    | 'available';
 
 export const TERM_PAPER_STATUS_LABELS: Record<TermPaperStatus, string> = {
     pending: 'Pending',
@@ -26,6 +27,7 @@ export const TERM_PAPER_STATUS_LABELS: Record<TermPaperStatus, string> = {
     in_review: 'In Review',
     defended: 'Defended',
     failed: 'Failed',
+    available: 'Available',
 };
 
 export interface TermPaper {
@@ -38,9 +40,12 @@ export interface TermPaper {
     start_date: string;
     end_date: string;
     status: TermPaperStatus;
+    claimed_at: string | null;
+    file_path: string | null;
     teacher?: UserOption;
     student?: UserOption;
     remark?: Remark | null;
+    status_histories?: TermPaperStatusHistory[];
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
@@ -77,23 +82,6 @@ export const RECENSION_STATUS_LABELS: Record<RecensionStatus, string> = {
     assigned: 'Assigned',
     expired: 'Expired',
 };
-
-export interface Recension {
-    id: number;
-    title: string;
-    term_paper_id: number;
-    remark_id: number | null;
-    reviewer_id: number;
-    status: RecensionStatus;
-    final_verdict: string;
-    passed: boolean;
-    term_paper?: UserOption; // {id, name} от eager-loaded termPaper relation
-    remark?: Remark | null;
-    reviewer?: UserOption;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
-}
 
 export type ConsultationType = 'online' | 'in_person';
 
@@ -179,6 +167,43 @@ export interface Specialty {
     slug: string;
     institution_id: number;
     institution?: UserOption;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+}
+export interface TermPaperStatusHistory {
+    id: number;
+    term_paper_id: number;
+    label: string;
+    status: TermPaperStatus | null;
+    happened_at: string;
+}
+export type GenAiCheckStatus =
+    | 'not_checked'
+    | 'low_risk'
+    | 'medium_risk'
+    | 'high_risk';
+
+export const GENAI_CHECK_STATUS_LABELS: Record<GenAiCheckStatus, string> = {
+    not_checked: 'Непроверено',
+    low_risk: 'Нисък риск',
+    medium_risk: 'Среден риск',
+    high_risk: 'Висок риск',
+};
+export interface Recension {
+    id: number;
+    title: string;
+    term_paper_id: number;
+    remark_id: number | null;
+    reviewer_id: number;
+    status: RecensionStatus;
+    final_verdict: string;
+    passed: boolean;
+    plagiarism_percentage: number | null;
+    genai_status: GenAiCheckStatus;
+    term_paper?: UserOption;
+    remark?: Remark | null;
+    reviewer?: UserOption;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
