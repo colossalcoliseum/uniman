@@ -13,9 +13,9 @@ enum GenAiCheckStatus:string
     {
         return match ($this) {
             self::NOT_CHECKED => 'Непроверено',
-            self::LOW_RISK => 'Нисък риск',
-            self::MEDIUM_RISK => 'Среден риск',
-            self::HIGH_RISK => 'Висок риск',
+            self::LOW_RISK => 'Нисък Риск',
+            self::MEDIUM_RISK => 'Среден Риск',
+            self::HIGH_RISK => 'Висок Риск',
         };
     }
 }

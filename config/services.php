@@ -21,6 +21,7 @@ return [
     'resend' => [
         'key' => env('RESEND_API_KEY'),
     ],
+    'prepostseo' => ['key' => env('PREPOSTSEO_KEY')],
 
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),

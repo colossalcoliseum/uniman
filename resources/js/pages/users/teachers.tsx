@@ -25,9 +25,6 @@ import type { Paginated } from '@/types/models';
 
 const { teachers: teachersRoute, show, edit } = userRoutes;
 
-// Минимален вид на потребител, какъвто учителският списък връща -
-// без чувствителни полета (вж. UserPolicy::view, ограничен до RECTOR/ADMIN
-// за пълния профил; този списък показва само основни данни).
 interface TeacherRow {
     id: number;
     name: string;

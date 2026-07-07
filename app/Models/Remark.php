@@ -11,9 +11,4 @@ class Remark extends Model
 {
     /** @use HasFactory<\Database\Factories\RemarkFactory> */
     use HasFactory;
-    #[Scope]
-    protected function highest(Builder $query): void
-    {
-        $query->where('type');
-    }
 }

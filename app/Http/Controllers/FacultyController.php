@@ -74,7 +74,7 @@ class FacultyController extends Controller
         Faculty::create($request->validated());
 
         return redirect()->route('faculties.index')
-            ->with('success', 'Faculty Registered Successful');
+            ->with('success', 'Факултет Добавен Успешно');
     }
 
     /**
@@ -114,7 +114,7 @@ class FacultyController extends Controller
         $faculty->update($data);
 
         return redirect()->route('faculties.index')
-            ->with('success', 'Faculty Registered Successful');
+            ->with('success', 'Факултет Актуализиран');
 
     }
 
@@ -127,7 +127,7 @@ class FacultyController extends Controller
         $faculty->delete();
 
         return redirect()->route('faculties.index')
-            ->with('success', 'Faculty Removed  Successful');
+            ->with('success', 'Факултет Премахнат Успешно');
 
     }
     public function restore(Faculty $faculty): RedirectResponse
@@ -137,6 +137,6 @@ class FacultyController extends Controller
         $faculty->restore();
 
         return redirect()->route('faculties.index')
-            ->with('success', 'Faculty Restored');
+            ->with('success', 'Факултет Възстановен');
     }
 }

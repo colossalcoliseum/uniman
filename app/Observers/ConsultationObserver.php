@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Enums\TermPaperStatus;
 use App\Models\Consultation;
 use App\Models\TermPaperStatusHistory;
 
@@ -16,22 +15,27 @@ class ConsultationObserver
         if ($consultation->term_paper_id === null) {
             return;
         }
-
-        $isFirst = \App\Models\Consultation::where('term_paper_id', $consultation->term_paper_id)->count() === 1;
-
         TermPaperStatusHistory::create([
             'term_paper_id' => $consultation->term_paper_id,
-            'label' => $isFirst ? 'Първа консултация' : 'Консултация проведена',
+            'label' => 'Консултация Записана',
             'status' => null,
             'happened_at' => $consultation->starts_at,
         ]);
     }
+
     /**
      * Handle the Consultation "updated" event.
      */
-    public function updated(Consultation $consultation): void
-    {
-
+    public function updated(Consultation $consultation): void {
+        if ($consultation->term_paper_id === null) {
+            return;
+        }
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $consultation->term_paper_id,
+            'label' => 'Информация за Консултацията Актуализирана',
+            'status' => null,
+            'happened_at' => $consultation->starts_at,
+        ]);
     }
 
     /**
@@ -39,7 +43,15 @@ class ConsultationObserver
      */
     public function deleted(Consultation $consultation): void
     {
-        //
+        if ($consultation->term_paper_id === null) {
+            return;
+        }
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $consultation->term_paper_id,
+            'label' => 'Консултация Изтрита',
+            'status' => null,
+            'happened_at' => $consultation->starts_at,
+        ]);
     }
 
     /**
@@ -47,7 +59,15 @@ class ConsultationObserver
      */
     public function restored(Consultation $consultation): void
     {
-        //
+        if ($consultation->term_paper_id === null) {
+            return;
+        }
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $consultation->term_paper_id,
+            'label' => 'Консултация Възстановена',
+            'status' => null,
+            'happened_at' => $consultation->starts_at,
+        ]);
     }
 
     /**
@@ -55,8 +75,14 @@ class ConsultationObserver
      */
     public function forceDeleted(Consultation $consultation): void
     {
-        //
+        if ($consultation->term_paper_id === null) {
+            return;
+        }
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $consultation->term_paper_id,
+            'label' => 'Консултация Перманентно Изтрита',
+            'status' => null,
+            'happened_at' => $consultation->starts_at,
+        ]);
     }
-
-
 }

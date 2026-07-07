@@ -76,8 +76,7 @@ export default function Calendar({ teachers }: Props) {
 
                 <div className="rounded-md border bg-card p-4 text-card-foreground [&_.fc]:text-foreground [&_.fc-button]:border-border [&_.fc-button]:bg-secondary [&_.fc-button]:text-secondary-foreground [&_.fc-button-active]:bg-primary [&_.fc-button-active]:text-primary-foreground [&_.fc-col-header-cell]:bg-muted [&_.fc-day-today]:bg-accent [&_.fc-theme-standard_td]:border-border [&_.fc-theme-standard_th]:border-border">
                     <FullCalendar
-                       /* ref={calendarRef}*/
-                        plugins={[
+                         plugins={[
                             dayGridPlugin,
                             timeGridPlugin,
                             interactionPlugin,

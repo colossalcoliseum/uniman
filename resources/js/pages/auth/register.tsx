@@ -12,8 +12,8 @@ import { store } from '@/routes/register';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+            title="Създай профил"
+            description="Въведи Детайли за Създаване на Профил"
         >
             <Head title="Register" />
             <Form
@@ -26,7 +26,7 @@ export default function Register() {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Име</Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -35,7 +35,7 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Пълно Име"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -44,7 +44,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">Имейл Адрес</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -58,7 +58,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Парола</Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -66,14 +66,14 @@ export default function Register() {
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Парола"
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                    Потвърди Парола
                                 </Label>
                                 <Input
                                     id="password_confirmation"
@@ -82,7 +82,7 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Потвърди Парола"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -96,14 +96,14 @@ export default function Register() {
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
-                                Create account
+                                Създай Профил
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
                             Already have an account?{' '}
                             <TextLink href={login()} tabIndex={6}>
-                                Log in
+                                Влез в Профил
                             </TextLink>
                         </div>
                     </>

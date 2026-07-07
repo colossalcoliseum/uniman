@@ -20,14 +20,14 @@ export type TermPaperStatus =
     | 'available';
 
 export const TERM_PAPER_STATUS_LABELS: Record<TermPaperStatus, string> = {
-    pending: 'Pending',
-    accepted: 'Accepted',
-    rejected: 'Rejected',
-    revision_required: 'Revision Required',
-    in_review: 'In Review',
-    defended: 'Defended',
-    failed: 'Failed',
-    available: 'Available',
+    pending: 'В изчакване',
+    accepted: 'Приет',
+    rejected: 'Отхвърлен',
+    revision_required: 'Нужда от ревизия',
+    in_review: 'Провежда се разглеждане',
+    defended: 'Защитена',
+    failed: 'Неуспешно положена дипломна работа',
+    available: 'Налична',
 };
 
 export interface TermPaper {
@@ -73,29 +73,29 @@ export type RecensionStatus =
     | 'expired';
 
 export const RECENSION_STATUS_LABELS: Record<RecensionStatus, string> = {
-    pending: 'Pending',
-    currently_reviewed: 'Currently Reviewed',
-    passed_recension: 'Passed Recension',
-    failed_recension: 'Failed Recension',
-    revision_required: 'Revision Required',
-    resubmitted: 'Resubmitted',
-    assigned: 'Assigned',
-    expired: 'Expired',
+    pending: 'В изчакване',
+    currently_reviewed: 'Сега се разглежда',
+    passed_recension: 'Минала рецензия',
+    failed_recension: 'Рецензия неуспешно премината',
+    revision_required: 'Нужда от ревизия',
+    resubmitted: 'Изпратена наново',
+    assigned: 'Зададена',
+    expired: 'Изтекла',
 };
 
 export type ConsultationType = 'online' | 'in_person';
 
 export const CONSULTATION_TYPE_LABELS: Record<ConsultationType, string> = {
-    online: 'Online',
-    in_person: 'In Person',
+    online: 'Онлайн',
+    in_person: 'На живо',
 };
 
 export type ConsultationStatus = 'pending' | 'accepted' | 'rejected';
 
 export const CONSULTATION_STATUS_LABELS: Record<ConsultationStatus, string> = {
-    pending: 'Pending',
-    accepted: 'Accepted',
-    rejected: 'Rejected',
+    pending: 'В изчакване',
+    accepted: 'Приета',
+    rejected: 'Отхвърлена',
 };
 
 export interface Consultation {
@@ -128,9 +128,9 @@ export type InstitutionType =
     | 'independent_college';
 
 export const INSTITUTION_TYPE_LABELS: Record<InstitutionType, string> = {
-    university: 'University',
-    specialized_higher_school: 'Specialized Higher School',
-    independent_college: 'Independent College',
+    university: 'Университет',
+    specialized_higher_school: 'Специализирано висше училище',
+    independent_college: 'Независим колеж',
 };
 
 export interface Institution {

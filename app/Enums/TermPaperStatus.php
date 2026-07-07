@@ -16,14 +16,14 @@ enum TermPaperStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::PENDING => 'Pending',
-            self::ACCEPTED => 'Accepted',
-            self::REJECTED => 'Rejected',
-            self::REVISION_REQUIRED => 'Revision Required',
-            self::IN_REVIEW => 'In Review',
-            self::DEFENDED => 'Defended',
-            self::FAILED => 'Failed',
-            self::AVAILABLE => 'Available',
+            self::PENDING => 'В изчакване',
+            self::ACCEPTED => 'Приета',
+            self::REJECTED => 'Отхвърлена',
+            self::REVISION_REQUIRED => 'Нужна Ревизия',
+            self::IN_REVIEW => 'Процес на Разглеждане',
+            self::DEFENDED => 'Защитена',
+            self::FAILED => 'Неуспешно Взета',
+            self::AVAILABLE => 'Налична',
         };
     }
 }

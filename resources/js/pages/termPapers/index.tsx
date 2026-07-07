@@ -167,7 +167,7 @@ export default function Index({ termPapers, filters }: Props) {
                                             Сигурен ли си?
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Курсовата работа "
+                                            Дипломната работа "
                                             {row.original.name}" ще бъде
                                             преместена в кошчето. Може да я
                                             възстановиш по-късно.
@@ -202,9 +202,9 @@ export default function Index({ termPapers, filters }: Props) {
 
     return (
         <AppLayout
-            breadcrumbs={[{ title: 'Курсови работи', href: index().url }]}
+            breadcrumbs={[{ title: 'Дипломни работи', href: index().url }]}
         >
-            <Head title="Курсови работи" />
+            <Head title="Дипломни работи" />
 
             <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
@@ -223,7 +223,7 @@ export default function Index({ termPapers, filters }: Props) {
                     </div>
                     {!showTrashed && (
                         <Button asChild>
-                            <Link href={create().url}>Нова курсова работа</Link>
+                            <Link href={create().url}>Нова дипломна работа</Link>
                         </Button>
                     )}
                 </div>

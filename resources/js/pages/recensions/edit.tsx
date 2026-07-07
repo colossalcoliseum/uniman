@@ -68,8 +68,7 @@ export default function Edit({
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* title */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="title">Заглавие</Label>
                         <Input
                             id="title"
@@ -83,15 +82,14 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* term_paper_id */}
-                    <div>
-                        <Label htmlFor="term_paper_id">Курсова работа</Label>
+                     <div>
+                        <Label htmlFor="term_paper_id">Дипломна работа</Label>
                         <Select
                             value={data.term_paper_id}
                             onValueChange={(v) => setData('term_paper_id', v)}
                         >
                             <SelectTrigger id="term_paper_id">
-                                <SelectValue placeholder="Избери курсова работа" />
+                                <SelectValue placeholder="Избери дипломна работа" />
                             </SelectTrigger>
                             <SelectContent>
                                 {termPapers.map((termPaper) => (
@@ -111,8 +109,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* reviewer_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="reviewer_id">Рецензент</Label>
                         <Select
                             value={data.reviewer_id}
@@ -139,8 +136,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* status */}
-                    <div>
+                     <div>
                         <Label htmlFor="status">Статус</Label>
                         <Select
                             value={data.status}
@@ -166,8 +162,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* remark_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="remark_id">Оценка</Label>
                         <Select
                             value={data.remark_id}
@@ -212,8 +207,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* passed */}
-                    <div className="col-span-2 flex items-center gap-2">
+                     <div className="col-span-2 flex items-center gap-2">
                         <Checkbox
                             id="passed"
                             checked={data.passed}

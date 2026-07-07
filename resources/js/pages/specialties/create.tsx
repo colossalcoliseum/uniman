@@ -43,7 +43,6 @@ export default function Create({ institutions }: Props) {
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* name */}
                     <div className="col-span-2">
                         <Label htmlFor="name">Име</Label>
                         <Input
@@ -58,7 +57,6 @@ export default function Create({ institutions }: Props) {
                         )}
                     </div>
 
-                    {/* slug */}
                     <div className="col-span-2">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
@@ -73,7 +71,6 @@ export default function Create({ institutions }: Props) {
                         )}
                     </div>
 
-                    {/* institution_id */}
                     <div className="col-span-2">
                         <Label htmlFor="institution_id">Институция</Label>
                         <Select

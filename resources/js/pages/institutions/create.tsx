@@ -54,8 +54,7 @@ export default function Create({ countries, users }: Props) {
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* name */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="name">Име</Label>
                         <Input
                             id="name"
@@ -69,8 +68,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* slug */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
                             id="slug"
@@ -84,8 +82,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* type */}
-                    <div>
+                     <div>
                         <Label htmlFor="type">Тип</Label>
                         <Select
                             value={data.type}
@@ -111,8 +108,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* country_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="country_id">Държава</Label>
                         <Select
                             value={data.country_id}
@@ -139,8 +135,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* manager_id */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="manager_id">Управител</Label>
                         <Select
                             value={data.manager_id}
@@ -167,8 +162,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* description */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
@@ -185,8 +179,7 @@ export default function Create({ countries, users }: Props) {
                         )}
                     </div>
 
-                    {/* logo */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="logo">Лого</Label>
                         <Input
                             id="logo"

@@ -82,8 +82,7 @@ class ConsultationController extends Controller
 
         $termPaper = TermPaper::findOrFail($data['term_paper_id']);
 
-        // защита - само учителят на темата (или admin) може да създава консултация за нея
-        abort_if(
+         abort_if(
             $termPaper->teacher_id !== auth()->id() && auth()->user()->role !== UserRole::ADMIN,
             403
         );
@@ -93,7 +92,7 @@ class ConsultationController extends Controller
         Consultation::create($data);
 
         return redirect()->route('consultations.index')
-            ->with('success', 'Consultation Added');
+            ->with('success', 'Консутация Добавена');
     }
 
     /**
@@ -146,7 +145,7 @@ class ConsultationController extends Controller
         $consultation->update($data);
 
         return redirect()->route('consultations.index')
-            ->with('success', 'Consultation Updated');
+            ->with('success', 'Консултация Актуализирана');
     }
 
     /**
@@ -158,7 +157,7 @@ class ConsultationController extends Controller
         $consultation->delete();
 
         return redirect()->route('consultations.index')
-            ->with('success', 'Consultation Removed');
+            ->with('success', 'Консултация Премахната');
     }
     public function calendar(): Response
     {

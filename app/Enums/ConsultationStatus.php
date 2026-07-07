@@ -11,9 +11,9 @@ enum ConsultationStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::PENDING => 'Pending',
-            self::ACCEPTED => 'Accepted',
-            self::REJECTED => 'Rejected',
+            self::PENDING => 'В изчакване',
+            self::ACCEPTED => 'Приета',
+            self::REJECTED => 'Отхвърлена',
         };
     }
 }

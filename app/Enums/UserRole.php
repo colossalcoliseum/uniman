@@ -15,13 +15,13 @@ enum UserRole: string
     public function labels(): string
     {
         return match ($this) {
-            self::ADMIN => 'Admin',
-            self::DEAN => 'Dean',
-            self::RECTOR => 'Rector',
-            self::PROFESSOR => 'Professor',
-            self::ASSISTANT => 'Assistant',
-            self::STUDENT => 'Student',
-            self::ASSOCIATE_PROFESSOR => 'Associate Professor',
+            self::ADMIN => 'Админ',
+            self::DEAN => 'Декан',
+            self::RECTOR => 'Ректор',
+            self::PROFESSOR => 'Професор',
+            self::ASSISTANT => 'Асистент',
+            self::STUDENT => 'Студент',
+            self::ASSOCIATE_PROFESSOR => 'Доцент',
         };
     }
 

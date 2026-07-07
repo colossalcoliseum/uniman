@@ -61,15 +61,14 @@ export default function Edit({
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* term_paper_id */}
-                    <div className="col-span-2">
-                        <Label htmlFor="term_paper_id">Курсова работа</Label>
+                     <div className="col-span-2">
+                        <Label htmlFor="term_paper_id">Дипломна работа</Label>
                         <Select
                             value={data.term_paper_id}
                             onValueChange={(v) => setData('term_paper_id', v)}
                         >
                             <SelectTrigger id="term_paper_id">
-                                <SelectValue placeholder="Избери курсова работа" />
+                                <SelectValue placeholder="Избери дипломна работа" />
                             </SelectTrigger>
                             <SelectContent>
                                 {termPapers.map((termPaper) => (
@@ -88,8 +87,7 @@ export default function Edit({
                             </p>
                         )}
                     </div>
-                    {/* student_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="student_id">Студент</Label>
                         <Select
                             value={data.student_id}
@@ -116,8 +114,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* starts_at */}
-                    <div>
+                     <div>
                         <Label htmlFor="starts_at">Начало</Label>
                         <Input
                             id="starts_at"
@@ -134,8 +131,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* ends_at */}
-                    <div>
+                     <div>
                         <Label htmlFor="ends_at">Край</Label>
                         <Input
                             id="ends_at"
@@ -150,8 +146,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* type */}
-                    <div>
+                     <div>
                         <Label htmlFor="type">Тип</Label>
                         <Select
                             value={data.type}
@@ -177,8 +172,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* status */}
-                    <div>
+                     <div>
                         <Label htmlFor="status">Статус</Label>
                         <Select
                             value={data.status}
@@ -204,8 +198,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* location */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="location">Локация</Label>
                         <Input
                             id="location"
@@ -221,8 +214,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* notes */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="notes">Бележки</Label>
                         <Textarea
                             id="notes"

@@ -40,13 +40,7 @@ export default function Edit({
         end_date: termPaper.end_date,
         status: termPaper.status as string,
         remark_id: termPaper.remark ? String(termPaper.remark) : '',
-        // Файлът се препраща само ако потребителят избере нов; ако остане
-        // null, съществуващият file_path в базата не се презаписва
-        // (реалната логика за това предстои на backend ниво по-късно).
-        file: null as File | null,
-        // Laravel очаква PUT/PATCH да дойде като _method поле, когато
-        // заявката носи файл - HTML formите не поддържат multipart/form-data
-        // през истински PUT заявки.
+        file_path: null as File | null,
         _method: 'put',
     });
 
@@ -78,7 +72,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* slug */}
                     <div className="col-span-2">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
@@ -93,7 +86,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* teacher_id */}
                     <div>
                         <Label htmlFor="teacher_id">Учител</Label>
                         <Select
@@ -121,7 +113,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* student_id */}
                     <div>
                         <Label htmlFor="student_id">Студент</Label>
                         <Select
@@ -149,7 +140,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* start_date */}
                     <div>
                         <Label htmlFor="start_date">Начална дата</Label>
                         <Input
@@ -167,7 +157,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* end_date */}
                     <div>
                         <Label htmlFor="end_date">Крайна дата</Label>
                         <Input
@@ -185,7 +174,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* status */}
                     <div>
                         <Label htmlFor="status">Статус</Label>
                         <Select
@@ -212,7 +200,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* remark_id */}
                     <div>
                         <Label htmlFor="remark_id">Оценка</Label>
                         <Select
@@ -240,7 +227,6 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* file */}
                     <div className="col-span-2">
                         <Label htmlFor="file">Файл на дипломната работа</Label>
                         {termPaper.file_path && (
@@ -249,16 +235,19 @@ export default function Edit({
                             </p>
                         )}
                         <Input
-                            id="file"
+                            id="file_path"
                             type="file"
                             accept=".pdf,.doc,.docx"
                             onChange={(e) =>
-                                setData('file', e.target.files?.[0] ?? null)
+                                setData(
+                                    'file_path',
+                                    e.target.files?.[0] ?? null,
+                                )
                             }
                         />
-                        {errors.file && (
+                        {errors.file_path && (
                             <p className="text-sm text-destructive">
-                                {errors.file}
+                                {errors.file_path}
                             </p>
                         )}
                     </div>

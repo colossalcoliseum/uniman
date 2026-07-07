@@ -24,7 +24,7 @@ const { index, store } = recensionRoutes;
 interface Props {
     reviewers: UserOption[];
     remarks: Remark[];
-    termPapers: UserOption[]; // {id, name} - само избраните колони от TermPaper::select('id', 'name')
+    termPapers: UserOption[];
 }
 import {
     RECENSION_STATUS_LABELS,
@@ -72,15 +72,14 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* term_paper_id */}
-                    <div>
-                        <Label htmlFor="term_paper_id">Курсова работа</Label>
+                     <div>
+                        <Label htmlFor="term_paper_id">Дипломна работа</Label>
                         <Select
                             value={data.term_paper_id}
                             onValueChange={(v) => setData('term_paper_id', v)}
                         >
                             <SelectTrigger id="term_paper_id">
-                                <SelectValue placeholder="Избери курсова работа" />
+                                <SelectValue placeholder="Избери дипломна работа" />
                             </SelectTrigger>
                             <SelectContent>
                                 {termPapers.map((termPaper) => (
@@ -100,8 +99,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* reviewer_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="reviewer_id">Рецензент</Label>
                         <Select
                             value={data.reviewer_id}
@@ -128,8 +126,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* status */}
-                    <div>
+                     <div>
                         <Label htmlFor="status">Статус</Label>
                         <Select
                             value={data.status}
@@ -155,8 +152,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* remark_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="remark_id">Оценка</Label>
                         <Select
                             value={data.remark_id}
@@ -203,8 +199,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* genai_status */}
-                    <div>
+                     <div>
                         <Label htmlFor="genai_status">GenAI проверка</Label>
                         <Select
                             value={data.genai_status}
@@ -229,8 +224,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                             </p>
                         )}
                     </div>
-                    {/* final_verdict */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="final_verdict">Заключение</Label>
                         <Textarea
                             id="final_verdict"
@@ -247,8 +241,7 @@ export default function Create({ reviewers, remarks, termPapers }: Props) {
                         )}
                     </div>
 
-                    {/* passed */}
-                    <div className="col-span-2 flex items-center gap-2">
+                     <div className="col-span-2 flex items-center gap-2">
                         <Checkbox
                             id="passed"
                             checked={data.passed}

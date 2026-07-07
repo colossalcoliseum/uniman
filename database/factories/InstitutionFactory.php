@@ -44,7 +44,7 @@ class InstitutionFactory extends Factory
             'Public University',
         ];
 
-        return $universityTypes[array_rand($universityTypes)].' of '.$this->faker->country();
+        return $universityTypes[array_rand($universityTypes)].' of Bulgaria';
     }
 
     private function generateSlug($name): string

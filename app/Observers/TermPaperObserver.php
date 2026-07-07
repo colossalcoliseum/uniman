@@ -14,7 +14,7 @@ class TermPaperObserver
     {
         TermPaperStatusHistory::create([
             'term_paper_id' => $termPaper->id,
-            'label' => $termPaper->status->label(),
+            'label' => 'Дипломна Работа Създадена',
             'status' => $termPaper->status->value,
             'happened_at' => $termPaper->created_at,
         ]);
@@ -28,7 +28,7 @@ class TermPaperObserver
         if ($termPaper->isDirty('status')) {
             TermPaperStatusHistory::create([
                 'term_paper_id' => $termPaper->id,
-                'label' => $termPaper->status->label(),
+                'label' => 'Дипломна Работа Актуализирана',
                 'status' => $termPaper->status->value,
                 'happened_at' => now(),
             ]);
@@ -40,7 +40,12 @@ class TermPaperObserver
      */
     public function deleted(TermPaper $termPaper): void
     {
-        //
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $termPaper->id,
+            'label' => 'Дипломна Работа Изтрита',
+            'status' => $termPaper->status->value,
+            'happened_at' => now(),
+        ]);
     }
 
     /**
@@ -48,7 +53,12 @@ class TermPaperObserver
      */
     public function restored(TermPaper $termPaper): void
     {
-        //
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $termPaper->id,
+            'label' => 'Дипломна Работа Възстановена',
+            'status' => $termPaper->status->value,
+            'happened_at' => now(),
+        ]);
     }
 
     /**
@@ -56,17 +66,13 @@ class TermPaperObserver
      */
     public function forceDeleted(TermPaper $termPaper): void
     {
-        //
-    }
-    private function labelForStatus(TermPaperStatus $status): string
-    {
-        return match ($status) {
-            TermPaperStatus::AVAILABLE => 'Темата е предложена',
-            TermPaperStatus::PENDING => 'Темата е избрана от студент',
-            TermPaperStatus::APPROVED => 'Темата е одобрена',
-            TermPaperStatus::SUBMITTED => 'Дипломната работа е предадена',
-            TermPaperStatus::DEFENDED => 'Защитена',
-            default => $status->value,
-        };
+
+        TermPaperStatusHistory::create([
+            'term_paper_id' => $termPaper->id,
+            'label' => 'Дипломна Работа Перманентно Изтрита',
+            'status' => $termPaper->status->value,
+            'happened_at' => now(),
+        ]);
+
     }
 }

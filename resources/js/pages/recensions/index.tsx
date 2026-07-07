@@ -84,7 +84,7 @@ export default function Index({ recensions, filters }: Props) {
         { accessorKey: 'title', header: 'Заглавие' },
         {
             id: 'term_paper',
-            header: 'Курсова работа',
+            header: 'Дипломна работа',
             cell: ({ row }) => row.original.term_paper?.name ?? '—',
         },
         {

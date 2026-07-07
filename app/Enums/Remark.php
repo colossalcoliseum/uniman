@@ -13,11 +13,11 @@ enum Remark: string
     public function label(): string
     {
         return match ($this) {
-            self::A => 'Excellent',
-            self::B => 'Good',
-            self::C => 'Average',
-            self::D => 'Below Average',
-            self::F => 'Fail',
+            self::A => 'Отличен',
+            self::B => 'Много Добър',
+            self::C => 'Добър',
+            self::D => 'Среден',
+            self::F => 'Слаб',
         };
     }
 

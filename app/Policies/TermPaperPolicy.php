@@ -20,7 +20,7 @@ class TermPaperPolicy
 
     public function viewAny(User $user): bool
     {
-        return in_array($user->type, [UserType::TEACHER, UserType::STUDENT], true);
+        return true;
     }
 
     /**
@@ -56,7 +56,7 @@ class TermPaperPolicy
     public function delete(User $user, TermPaper $termPaper): bool
     {
         return $termPaper->teacher_id === $user->id ||
-                in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
+            in_array($user->role, [UserRole::RECTOR, UserRole::DEAN], true);
 
     }
 
@@ -76,6 +76,7 @@ class TermPaperPolicy
     {
         return false;
     }
+
     public function claim(User $user, TermPaper $termPaper): bool
     {
         return $user->type === UserType::STUDENT

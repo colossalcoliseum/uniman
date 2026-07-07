@@ -75,7 +75,7 @@ class InstitutionController extends Controller
         Institution::create($data);
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institutions Registered Successful');
+            ->with('success', 'Институция Добавена Успешно');
     }
 
     /**
@@ -120,7 +120,7 @@ class InstitutionController extends Controller
         $institution->update($data);
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institutions Updated Successful');
+            ->with('success', 'Институция Актуализирана Успешно');
     }
 
     /**
@@ -133,7 +133,7 @@ class InstitutionController extends Controller
         $institution->delete();
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institutions Removed from Registry Successful');
+            ->with('success', 'Институция Премахната');
     }
 
     public function restore(Institution $institution): RedirectResponse
@@ -143,6 +143,6 @@ class InstitutionController extends Controller
         $institution->restore();
 
         return redirect()->route('institutions.index')
-            ->with('success', 'Institution Restored');
+            ->with('success', 'Институция Възстановена');
     }
 }

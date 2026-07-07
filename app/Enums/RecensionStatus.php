@@ -16,14 +16,14 @@ enum RecensionStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::PENDING => 'Pending',
-            self::CURRENTLY_REVIEWED => 'Currently Reviewed',
-            self::PASSED_RECENSION => 'Passed Recension',
-            self::FAILED_RECENSION => 'Failed Recension',
-            self::REVISION_REQUIRED => 'Revision Required',
-            self::RESUBMITTED => 'Resubmitted',
-            self::ASSIGNED => 'Assigned',
-            self::EXPIRED => 'Expired',
+            self::PENDING => 'В изчакване',
+            self::CURRENTLY_REVIEWED => 'Вмомента се Разглежда',
+            self::PASSED_RECENSION => 'Успешно Минала Рецензия',
+            self::FAILED_RECENSION => 'Неуспешно Минала Рецензия',
+            self::REVISION_REQUIRED => 'Нужна Ревизия',
+            self::RESUBMITTED => 'Изпратена Отново',
+            self::ASSIGNED => 'Възложена',
+            self::EXPIRED => 'Изтекла',
 
         };
     }

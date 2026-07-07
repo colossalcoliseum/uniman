@@ -34,32 +34,25 @@ export default function Create({ teachers, students, remarks }: Props) {
         end_date: '',
         status: '',
         remark_id: '',
-        // Файлът на дипломната работа. Полето е nullable - не е
-        // задължително при създаване на темата, тъй като файлът
-        // обикновено се прикача по-късно, при предаване на готовата работа.
-        file: null as File | null,
+        file_path: null as File | null,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Inertia сериализира заявката като multipart/form-data
-        // автоматично, щом в data присъства File обект - не е нужна
-        // ръчна изработка на FormData тук.
         post(store().url, { forceFormData: true });
     };
 
     return (
         <AppLayout
-            breadcrumbs={[{ title: 'Курсови работи', href: index().url }]}
+            breadcrumbs={[{ title: 'Дипломни работи', href: index().url }]}
         >
-            <Head title="Нова курсова работа" />
+            <Head title="Нова дипломна работа" />
 
             <div className="p-6">
                 <form
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* name */}
                     <div className="col-span-2">
                         <Label htmlFor="name">Заглавие</Label>
                         <Input
@@ -74,7 +67,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* slug */}
                     <div className="col-span-2">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
@@ -89,7 +81,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* teacher_id */}
                     <div>
                         <Label htmlFor="teacher_id">Учител</Label>
                         <Select
@@ -117,7 +108,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* student_id */}
                     <div>
                         <Label htmlFor="student_id">Студент</Label>
                         <Select
@@ -145,7 +135,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* start_date */}
                     <div>
                         <Label htmlFor="start_date">Начална дата</Label>
                         <Input
@@ -163,7 +152,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* end_date */}
                     <div>
                         <Label htmlFor="end_date">Крайна дата</Label>
                         <Input
@@ -181,7 +169,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* status */}
                     <div>
                         <Label htmlFor="status">Статус</Label>
                         <Select
@@ -208,7 +195,6 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* remark_id */}
                     <div>
                         <Label htmlFor="remark_id">Оценка</Label>
                         <Select
@@ -236,20 +222,22 @@ export default function Create({ teachers, students, remarks }: Props) {
                         )}
                     </div>
 
-                    {/* file */}
                     <div className="col-span-2">
                         <Label htmlFor="file">Файл на дипломната работа</Label>
                         <Input
-                            id="file"
+                            id="file_path"
                             type="file"
                             accept=".pdf,.doc,.docx"
                             onChange={(e) =>
-                                setData('file', e.target.files?.[0] ?? null)
+                                setData(
+                                    'file_path',
+                                    e.target.files?.[0] ?? null,
+                                )
                             }
                         />
-                        {errors.file && (
+                        {errors.file_path && (
                             <p className="text-sm text-destructive">
-                                {errors.file}
+                                {errors.file_path}
                             </p>
                         )}
                     </div>

@@ -9,28 +9,28 @@ export default function TermPaperTimeline({ histories }: Props) {
     if (histories.length === 0) {
         return (
             <p className="text-sm text-muted-foreground">
-                Все още няма записана история.
+                Няма записана история.
             </p>
         );
     }
 
     return (
         <div className="flex gap-6 overflow-x-auto pt-2 pb-4">
-            {histories.map((entry, i) => {
+            {histories.map((item, i) => {
                 const isAbove = i % 2 === 0;
-                const date = new Date(entry.happened_at).toLocaleDateString(
+                const date = new Date(item.happened_at).toLocaleDateString(
                     'bg-BG',
                 );
 
                 return (
                     <div
-                        key={entry.id}
+                        key={item.id}
                         className="flex w-44 shrink-0 flex-col items-center"
                     >
                         {isAbove && (
                             <div className="mb-2 text-center">
                                 <p className="text-sm font-medium">
-                                    {entry.label}
+                                    {item.label}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                     {date}
@@ -47,7 +47,7 @@ export default function TermPaperTimeline({ histories }: Props) {
                         {!isAbove && (
                             <div className="mt-2 text-center">
                                 <p className="text-sm font-medium">
-                                    {entry.label}
+                                    {item.label}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                     {date}

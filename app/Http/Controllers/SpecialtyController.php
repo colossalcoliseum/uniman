@@ -67,7 +67,7 @@ class SpecialtyController extends Controller
         Specialty::create($request->validated());
 
         return redirect()->route('specialties.index')
-            ->with('success', 'Specialty Added');
+            ->with('success', 'Специалност Добавена');
     }
 
     /**
@@ -105,7 +105,7 @@ class SpecialtyController extends Controller
         $specialty->update($request->validated());
 
         return redirect()->route('specialties.index')
-            ->with('success', 'Specialty Updated');
+            ->with('success', 'Специалност Актуализирана');
     }
 
     /**
@@ -118,7 +118,7 @@ class SpecialtyController extends Controller
         $specialty->delete();
 
         return redirect()->route('specialties.index')
-            ->with('success', 'Specialty Removed');
+            ->with('success', 'Специалност Премахната');
     }
 
     public function restore(Specialty $specialty): RedirectResponse
@@ -128,6 +128,6 @@ class SpecialtyController extends Controller
         $specialty->restore();
 
         return redirect()->route('specialties.index')
-            ->with('success', 'Specialty Restored');
+            ->with('success', 'Специалност Възстановена');
     }
 }

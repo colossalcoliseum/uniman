@@ -10,6 +10,8 @@ use App\Models\Recension;
 use App\Models\Remark;
 use App\Models\TermPaper;
 use App\Models\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -78,10 +80,91 @@ class RecensionController extends Controller
         Gate::authorize('create', Recension::class);
         $data = $request->validated();
 
-        Recension::create($data);
+        $termPaper = TermPaper::find($data['term_paper_id']);
+
+        if (! $termPaper) {
+            return redirect()->back()->with('error', 'Дипломната Работа Не е Намерена');
+        }
+
+        $textContent = $this->extractContentsFromWordFile($termPaper->file_path);
+        $plagResult = $this->plagiarismChecker($textContent);
+         Recension::create([
+            ...$data,
+            'plagiarism_percentage' => $plagResult['plagiarism_percentage'],
+        ]);
 
         return redirect()->route('recensions.index')
-            ->with('success', 'Recension Added');
+            ->with('success', 'Рецензия Добавена');
+    }
+
+    private function extractContentsFromWordFile($termPaperFilePath):string
+    {
+
+        $striped_content = '';
+        $content = '';
+        $absolutePath = storage_path('app/public/'.$termPaperFilePath);
+
+        $zip = zip_open($absolutePath);
+
+        if (! $zip || is_numeric($zip)) {
+            return 'Липсвва Файл';
+        }
+
+        while ($zip_entry = zip_read($zip)) {
+
+            if (zip_entry_open($zip, $zip_entry) == false) {
+                continue;
+            }
+
+            if (zip_entry_name($zip_entry) != 'word/document.xml') {
+                continue;
+            }
+
+            $content .= zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+
+            zip_entry_close($zip_entry);
+        }
+
+        zip_close($zip);
+
+        $content = str_replace('</w:r></w:p></w:tc><w:tc>', ' ', $content);
+        $content = str_replace('</w:r></w:p>', "\r\n", $content);
+        $striped_content = strip_tags($content);
+
+        return $striped_content;
+    }
+
+
+    public function plagiarismChecker(string $termPaperTextContents): array
+    {
+        $client = new Client;
+
+        try {
+            $response = $client->post('https://www.prepostseo.com/apis/checkPlag', [
+                'form_params' => [
+                    'key'  => config('services.prepostseo.key'),
+                    'data' => $this->truncateToWordLimit($termPaperTextContents, 2499),
+                ],
+            ]);
+
+            $result = json_decode($response->getBody()->getContents(), true);
+            return [
+                 'unique_percentage'     => $result['uniquePercent'] ?? null,
+             ];
+        } catch (GuzzleException $e) {
+            report($e);
+            return [
+                'plagiarism_percentage' => null,
+                'error'                 => $e->getMessage(),
+            ];
+        }
+    }
+
+    private function truncateToWordLimit(string $text, int $limit): string
+    {
+        $words = preg_split('/\s+/', trim($text));
+
+        return implode(' ', array_slice($words, 0, $limit));
     }
 
     /**
@@ -121,7 +204,7 @@ class RecensionController extends Controller
         $recension->update($data);
 
         return redirect()->route('recensions.index')
-            ->with('success', 'Recension Updated');
+            ->with('success', 'Рецензия Актуализирана');
     }
 
     /**
@@ -133,7 +216,7 @@ class RecensionController extends Controller
         $recension->delete();
 
         return redirect()->route('recensions.index')
-            ->with('success', 'Recension Removed');
+            ->with('success', 'Рецензия Премахната');
     }
 
     public function restore(Recension $recension): RedirectResponse
@@ -143,6 +226,6 @@ class RecensionController extends Controller
         $recension->restore();
 
         return redirect()->route('recensions.index')
-            ->with('success', 'Recension Restored');
+            ->with('success', 'Рецензия Възстановена');
     }
 }

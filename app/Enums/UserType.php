@@ -10,8 +10,8 @@ enum UserType: string
     public function labels(): string
     {
         return match ($this) {
-            self::STUDENT => 'Student',
-            self::TEACHER => 'Teacher',
+            self::STUDENT => 'Студент',
+            self::TEACHER => 'Преподавател',
 
         };
     }

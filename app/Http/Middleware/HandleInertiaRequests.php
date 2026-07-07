@@ -51,6 +51,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'messages' => flash()->render('array'),
             'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'can' => $request->user() ? [
                 'termPapers' => [

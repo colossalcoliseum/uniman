@@ -61,7 +61,7 @@ export default function Index({ consultations }: Props) {
     const columns: ColumnDef<Consultation>[] = [
         {
             id: 'term_paper',
-            header: 'Курсова работа',
+            header: 'Дипломна работа',
             cell: ({ row }) => row.original.term_paper?.name ?? '—',
         },
         {

@@ -23,6 +23,7 @@ class Recension extends Model
         'final_verdict',
         'passed',
         'plagiarism_percentage',
+
         'genai_status',
     ];
     protected $casts = [

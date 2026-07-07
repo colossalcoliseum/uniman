@@ -23,7 +23,6 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - phpunit/phpunit (PHPUNIT) - v11
 - @inertiajs/react (INERTIA) - v2
 - react (REACT) - v19
-- tailwindcss (TAILWINDCSS) - v4
 - @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
 - eslint (ESLINT) - v9
 - prettier (PRETTIER) - v3
@@ -34,7 +33,6 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - `wayfinder-development` — Activates whenever referencing backend routes in frontend components. Use when importing from @/actions or @/routes, calling Laravel routes from TypeScript, or working with Wayfinder route functions.
 - `inertia-react-development` — Develops Inertia.js v2 React client-side applications. Activates when creating React pages, forms, or navigation; using &lt;Link&gt;, &lt;Form&gt;, useForm, or router; working with deferred props, prefetching, or polling; or when user mentions React with Inertia, React pages, React forms, or React navigation.
-- `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
 
 ## Conventions
 
@@ -286,12 +284,4 @@ Wayfinder generates TypeScript functions for Laravel routes. Import from `@/acti
 # Inertia + React
 
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
-
-=== tailwindcss/core rules ===
-
-# Tailwind CSS
-
-- Always use existing Tailwind conventions; check project patterns before adding new ones.
-- IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
-- IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
 </laravel-boost-guidelines>

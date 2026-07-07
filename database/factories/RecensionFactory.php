@@ -25,7 +25,7 @@ class RecensionFactory extends Factory
 
         return [
             'term_paper_id' => $termPaper->id,
-            'title' => $termPaper->title,
+            'title' => $this->faker->sentence(5),
             'remark_id' => Remark::inRandomOrder()->value('id'),
             'reviewer_id' => $this->getReviewerId(),
             'status' => $this->faker->randomElement(TermPaperStatus::cases()),

@@ -53,7 +53,7 @@ export function AppSidebar() {
             visible: true,
         },
         {
-            title: 'Курсови работи',
+            title: 'Дипломни работи',
             href: termPaperRoutes.index().url,
             icon: GraduationCap,
             visible: can.termPapers.viewAny,

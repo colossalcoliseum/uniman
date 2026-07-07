@@ -70,24 +70,33 @@ class TermPaperController extends Controller
     {
         Gate::authorize('create', TermPaper::class);
         $data = $request->validated();
+        $termPaperFile = $request->file('file_path');
+        $termPaperFilePath = $termPaperFile->store('term-papers', 'public');
+        $textContent = $this->extractContentsFromWordFile($termPaperFilePath);
 
-        TermPaper::create($data);
+        $termPaper = TermPaper::create([
+            ...$data,
+            'file_path' => $termPaperFilePath,
+        ]);
 
         return redirect()->route('term-papers.index')
-            ->with('success', 'Term Paper Added');
+            ->with('success', 'Дипломна Работа Добавена');
     }
 
     /**
      * Display the specified resource.
      */
-        public function show(TermPaper $termPaper): Response
-        {
-            Gate::authorize('view', $termPaper);
+    public function show(TermPaper $termPaper): Response
+    {
+        Gate::authorize('view', $termPaper);
 
-            return Inertia::render('termPapers/show', [
-                'termPaper' =>     $termPaper->load(['statusHistories', 'teacher', 'student', 'remark']),
-            ]);
-        }
+        $textContent = $this->extractContentsFromWordFile($termPaper->file_path);
+
+        return Inertia::render('termPapers/show', [
+            'termPaper' => $termPaper->load(['statusHistories', 'teacher', 'student', 'remark']),
+            'termPaperTextContent' => $textContent,
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -111,10 +120,16 @@ class TermPaperController extends Controller
     {
         Gate::authorize('update', $termPaper);
         $data = $request->validated();
+        if ($request->hasFile('file_path')) {
+            $termPaperFile = $request->file('file_path');
+            $termPaperFilePath = $termPaperFile->store('term-papers', 'public');
+            $termPaper->update([...$data,
+                'file_path' => $termPaperFilePath]);
+        }
         $termPaper->update($data);
 
         return redirect()->route('term-papers.index')
-            ->with('success', 'Term Paper Updated');
+            ->with('success', 'Дипломна Работа Актуализирана');
     }
 
     /**
@@ -126,7 +141,7 @@ class TermPaperController extends Controller
         $termPaper->delete();
 
         return redirect()->route('term-papers.index')
-            ->with('success', 'Term Paper Removed');
+            ->with('success', 'Дипломна Работа Актуализирана');
     }
 
     public function restore(TermPaper $termPaper): RedirectResponse
@@ -136,8 +151,9 @@ class TermPaperController extends Controller
         $termPaper->restore();
 
         return redirect()->route('term-papers.index')
-            ->with('success', 'Term Paper Restored');
+            ->with('success', 'Дипломна Работа Възстановена');
     }
+
     public function claim(TermPaper $termPaper): RedirectResponse
     {
         Gate::authorize('claim', $termPaper);
@@ -149,6 +165,43 @@ class TermPaperController extends Controller
         ]);
 
         return redirect()->route('term-papers.index')
-            ->with('success', 'Заявихте темата успешно');
+            ->with('success', 'Тема Заявена Успешно');
+    }
+
+    private function extractContentsFromWordFile($termPaperFilePath): string
+    {
+
+        $striped_content = '';
+        $content = '';
+        $absolutePath = storage_path('app/public/'.$termPaperFilePath);
+
+        $zip = zip_open($absolutePath);
+
+        if (! $zip || is_numeric($zip)) {
+            return 'Липсвва Файл';
+        }
+
+        while ($zip_entry = zip_read($zip)) {
+
+            if (zip_entry_open($zip, $zip_entry) == false) {
+                continue;
+            }
+
+            if (zip_entry_name($zip_entry) != 'word/document.xml') {
+                continue;
+            }
+
+            $content .= zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+
+            zip_entry_close($zip_entry);
+        }
+
+        zip_close($zip);
+
+        $content = str_replace('</w:r></w:p></w:tc><w:tc>', ' ', $content);
+        $content = str_replace('</w:r></w:p>', "\r\n", $content);
+        $striped_content = strip_tags($content);
+
+        return $striped_content;
     }
 }

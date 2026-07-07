@@ -32,46 +32,40 @@ export default function Show({ consultation }: Props) {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
-                        {/* teacher */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Учител
                             </p>
                             <p>{consultation.teacher?.name ?? '—'}</p>
                         </div>
 
-                        {/* student */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Студент
                             </p>
                             <p>{consultation.student?.name ?? '—'}</p>
                         </div>
 
-                        {/* starts_at */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Начало
                             </p>
                             <p>{consultation.starts_at ?? '—'}</p>
                         </div>
 
-                        {/* ends_at */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Край
                             </p>
                             <p>{consultation.ends_at ?? '—'}</p>
                         </div>
 
-                        {/* type */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">Тип</p>
                             <p>{CONSULTATION_TYPE_LABELS[consultation.type]}</p>
                         </div>
 
-                        {/* status */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Статус
                             </p>
@@ -84,16 +78,14 @@ export default function Show({ consultation }: Props) {
                             </Badge>
                         </div>
 
-                        {/* location */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Локация
                             </p>
                             <p>{consultation.location ?? '—'}</p>
                         </div>
 
-                        {/* attended */}
-                        <div>
+                         <div>
                             <p className="text-sm text-muted-foreground">
                                 Присъствал
                             </p>
@@ -106,8 +98,7 @@ export default function Show({ consultation }: Props) {
                             </p>
                         </div>
 
-                        {/* notes */}
-                        <div className="col-span-2">
+                         <div className="col-span-2">
                             <p className="text-sm text-muted-foreground">
                                 Бележки
                             </p>

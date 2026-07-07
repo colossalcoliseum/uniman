@@ -10,8 +10,8 @@ enum ConsultationType: string
     public function label(): string
     {
         return match ($this) {
-            self::ONLINE => 'Online',
-            self::IN_PERSON => 'In Person',
+            self::ONLINE => 'Онлайн',
+            self::IN_PERSON => 'На Живо',
         };
     }
 }

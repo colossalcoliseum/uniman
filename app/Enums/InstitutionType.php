@@ -11,9 +11,9 @@ enum InstitutionType: string
     public function label(): string
     {
         return match ($this) {
-            self::UNIVERSITY => 'University',
-            self::SPECIALIZED_HIGHER_SCHOOL => 'Specialized Higher School',
-            self::INDEPENDENT_COLLEGE => 'Independent College',
+            self::UNIVERSITY => 'Университет',
+            self::SPECIALIZED_HIGHER_SCHOOL => 'Специализирано Висше Училище',
+            self::INDEPENDENT_COLLEGE => 'Независим Колеж',
         };
     }
 }

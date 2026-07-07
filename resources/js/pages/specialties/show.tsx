@@ -17,11 +17,13 @@ export default function Show({ specialty }: Props) {
     return (
         <AppLayout breadcrumbs={[{ title: 'Специалности', href: index().url }]}>
             <Head title={specialty.name} />
-
+            <h1 className="scroll-m-20 text-center text-3xl font-bold text-balance">
+                Специалност "{specialty.name}"
+            </h1>
             <div className="p-6">
                 <Card className="max-w-2xl">
                     <CardHeader>
-                        <CardTitle>{specialty.name}</CardTitle>
+                        <CardTitle>Информация</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
                         <div>

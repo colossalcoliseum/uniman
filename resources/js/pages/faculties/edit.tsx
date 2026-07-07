@@ -53,8 +53,7 @@ export default function Edit({
                     onSubmit={handleSubmit}
                     className="grid max-w-2xl grid-cols-2 gap-4"
                 >
-                    {/* name */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="name">Име</Label>
                         <Input
                             id="name"
@@ -68,8 +67,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* slug */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="slug">Slug</Label>
                         <Input
                             id="slug"
@@ -83,8 +81,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* institution_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="institution_id">Институция</Label>
                         <Select
                             value={data.institution_id}
@@ -111,8 +108,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* country_id */}
-                    <div>
+                     <div>
                         <Label htmlFor="country_id">Държава</Label>
                         <Select
                             value={data.country_id}
@@ -139,8 +135,7 @@ export default function Edit({
                         )}
                     </div>
 
-                    {/* dean_id */}
-                    <div className="col-span-2">
+                     <div className="col-span-2">
                         <Label htmlFor="dean_id">Декан</Label>
                         <Select
                             value={data.dean_id}

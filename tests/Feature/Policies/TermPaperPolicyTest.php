@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-
 class TermPaperPolicyTest extends TestCase
 {
     use RefreshDatabase;
@@ -105,8 +104,6 @@ class TermPaperPolicyTest extends TestCase
             'status' => TermPaperStatus::AVAILABLE,
         ]);
 
-        // Симулираме "непотърсена" тема в паметта, без да я записваме в БД,
-        // за да тестваме Policy логиката такава, каквато е писана в кода.
         $termPaper->student_id = null;
 
         $this->assertTrue($student->can('claim', $termPaper));

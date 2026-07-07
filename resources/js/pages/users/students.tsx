@@ -25,9 +25,6 @@ import type { Paginated } from '@/types/models';
 
 const { students: studentsRoute, show, edit } = userRoutes;
 
-// Минимален вид на потребител, какъвто студентският списък връща -
-// без чувствителни полета (вж. UserPolicy::view, ограничен до RECTOR/ADMIN
-// за пълния профил; този списък показва само основни данни).
 interface StudentRow {
     id: number;
     name: string;

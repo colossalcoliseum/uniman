@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserController extends Controller
 {
-    /**
-     * Списък с учители - видим за всеки автентикиран потребител.
-     */
+
     public function teachers(Request $request): Response
     {
         Gate::authorize('viewTeachers', User::class);
@@ -33,9 +31,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Списък със студенти - видим единствено за ректора (вж. UserPolicy::viewStudents).
-     */
     public function students(Request $request): Response
     {
         Gate::authorize('viewStudents', User::class);
@@ -50,10 +45,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Обща заявка, споделена между teachers() и students() - филтрира
-     * по тип потребител плюс по търсене/изтрити записи.
-     */
     private function filteredQuery(Request $request, UserType $type)
     {
         $query = User::query()->where('type', $type->value);
@@ -95,7 +86,7 @@ class UserController extends Controller
         User::create($data);
 
         return redirect()->route('users.teachers')
-            ->with('success', 'User Created Successfull');
+            ->with('success', 'Успешно Създаден Потребител');
     }
 
     /**
@@ -139,7 +130,7 @@ class UserController extends Controller
         $user->update($data);
 
         return redirect()->route('users.teachers')
-            ->with('success', 'User Update Successfully');
+            ->with('success', 'Успешно Актуализиран Потребител');
     }
 
     /**
@@ -151,7 +142,7 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.teachers')
-            ->with('success', 'User Deleted');
+            ->with('success', 'Потребител Изтрит');
     }
 
     public function toggleActive(User $user): RedirectResponse
@@ -172,7 +163,7 @@ class UserController extends Controller
         Gate::authorize('changeRole', $user);
         $user->update($request->validated());
 
-        return redirect()->back()->with('success', 'Role was updated.');
+        return redirect()->back()->with('success', 'Роля Актуализирана');
     }
 
     public function restore(int $id): RedirectResponse
@@ -184,6 +175,6 @@ class UserController extends Controller
         $user->restore();
 
         return redirect()->route('users.teachers')
-            ->with('success', 'User Restored');
+            ->with('success', 'Потребител Възстановен');
     }
 }
